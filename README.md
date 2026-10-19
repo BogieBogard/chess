@@ -4,11 +4,17 @@ A 3D chess battlefield published at https://mbogard.com/chess/.
 
 ## Play
 
-Choose computer or pass-and-play. Starting a game opens a viewport-filling focus view on desktop and mobile. Menu pauses choreography and holds AI replies until you continue; it also opens settings, a new game, or the full dashboard. Moves toggles the history drawer. The fullscreen button uses browser fullscreen where supported. Tap a piece, then a highlighted square, or drag it to a destination. Use the camera and +/− zoom buttons on touch screens; right-drag to orbit and scroll to zoom on desktop. Flip changes your side of the board. Overhead provides a clearer tactical view.
+Choose computer or pass-and-play. Starting a game opens a viewport-filling game view on desktop and mobile. Menu pauses the action and holds AI replies until you continue; it also opens settings, a new game, or the dashboard. Moves toggles the history drawer. Browser fullscreen is available where supported.
 
-Pawns kneel at rest, rise before marching, attack on captures, then return to guard. Mounted knights, siege towers, mitred bishops, and differently crowned royals have distinct silhouettes. Captures select thrusts, crosscuts, shield bashes, lance charges, siege rams, staff sweeps, and royal attacks based on piece, target, approach, and sequence. Armies face each other regardless of camera position.
+- Tap a warrior, then a highlighted square to move. Dragging always controls the camera, including when the drag starts over a piece.
+- Drag one finger to orbit with momentum; pinch to zoom; move two fingers to pan; twist two fingers to rotate. Desktop uses drag to orbit, right-drag or Shift-drag to pan, and the wheel to zoom.
+- Fit board recenters and frames the entire board, including the tallest pieces. Overhead provides a tactical view. Zoom buttons are also available.
 
-Animation speed and sound are configurable. Reduced-motion preferences skip choreography. A keyboard-accessible board is available by tabbing past the camera controls. WebGL is required for 3D; a text board remains available if renderer creation fails.
+The armies use detailed procedural marble and metal models: articulated armored infantry, barded horses and mounted lancers, crenellated siege towers, mitred bishops, and separately crowned royals. Veined stone, brass inlay, beveled tiles, a carved wood plinth, studio reflections, and directional shadows replace the original flat appearance. Rigid model details are batched by material; shadows update when the pieces move rather than on every idle camera frame.
+
+Pawns rise from a kneeling guard before walking. Captures approach to weapon reach, wind up, accelerate into contact, briefly hold the impact, and follow through. Targets fracture from their actual model geometry into solid chunks with capped cut surfaces; fragments scatter, rotate, bounce, and fade with dust, impact light, a brief camera kick, and layered stone-and-metal audio. Attack direction and piece type drive the choreography. The attacker advances into the captured square after the target has broken apart, then pawns kneel again.
+
+Animation speed and sound are configurable. Reduced-motion preferences skip movement and impact effects. A keyboard-accessible board is available by tabbing past the camera controls. WebGL is required for the 3D scene; a text board remains available if renderer creation fails.
 
 ## Develop
 
@@ -16,7 +22,11 @@ No build or package installation is required. Run `npm run preview` and open htt
 
 - `rules.js`: legal moves, notation, game state; also serialized into the AI worker.
 - `app.js`: interface, turn flow, promotion, worker lifecycle.
-- `battlefield.js`: Three.js scene, articulated procedural models, camera, picking, choreography.
+- `battlefield.js`: scene, framing, picking, lighting, and capture choreography.
+- `camera-controls.js`: tap/orbit separation, pinch, pan, twist, and momentum.
+- `pieces.js`: articulated models, rigid-part batching, and model resource disposal.
+- `materials.js`: procedural surfaces and studio environment reflections.
+- `destruction.js`: solid geometry fracture, debris physics, dust, fading, and cleanup.
 - `vendor/`: Three.js 0.180.0 and its MIT license, served locally.
 
-Push `main` to deploy via GitHub Pages. Models are intentionally stylized procedural geometry; future versions can replace them with authored, rigged assets while retaining the chess rules and turn flow.
+Push `main` to deploy via GitHub Pages. All models and surface textures are generated locally in code. No external model, texture service, build step, or runtime CDN is required.

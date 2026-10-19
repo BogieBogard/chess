@@ -1,74 +1,85 @@
 import * as T from './vendor/three.module.min.js';
-const smooth=t=>t*t*(3-2*t);
-const pos=i=>new T.Vector3(i%8-3.5,0,(i>>3)-3.5);
-const mat=(color,metalness=.35)=>new T.MeshStandardMaterial({color,metalness,roughness:.43});
-const palettes={w:{armor:mat('#e6dcc0'),trim:mat('#c59a51',.75),cloth:mat('#355865',.05)},b:{armor:mat('#465563'),trim:mat('#ba8e57',.75),cloth:mat('#652f37',.05)}};
-const geo={};
-function mesh(parent,shape,args,material,x=0,y=0,z=0){let key=shape+args.join(',');let g=geo[key]??=(new T[shape](...args));let m=new T.Mesh(g,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
-function box(g,m,x,y,z,w,h,d){return mesh(g,'BoxGeometry',[w,h,d],m,x,y,z)}
-function ball(g,m,x,y,z,r){return mesh(g,'SphereGeometry',[r,12,8],m,x,y,z)}
-function cyl(g,m,x,y,z,r,h,top=r){return mesh(g,'CylinderGeometry',[top,r,h,12],m,x,y,z)}
-function limb(parent,m,x,y,z){let g=new T.Group();g.position.set(x,y,z);parent.add(g);box(g,m,0,-.13,0,.115,.28,.13);let knee=new T.Group();knee.position.y=-.27;g.add(knee);box(knee,m,0,-.12,0,.10,.25,.11);box(knee,m,0,-.245,.055,.12,.08,.23);g.userData.knee=knee;return g}
-export function warrior(code){let g=new T.Group(),body=new T.Group(),p=palettes[code[0]],type=code[1];g.add(body);g.userData={code,body};
- cyl(g,p.trim,0,.045,0,.28,.09);cyl(g,p.armor,0,.10,0,.245,.045);
- if(type==='r'){
-  cyl(body,p.armor,0,.50,0,.22,.77,.19);cyl(body,p.trim,0,.84,0,.28,.08);
-  for(let i=0;i<6;i++){let a=i*Math.PI/3;box(body,p.armor,Math.sin(a)*.22,.95,Math.cos(a)*.22,.14,.19,.14)}
-  box(body,p.cloth,0,.55,.215,.10,.30,.025);box(body,p.trim,0,.69,.23,.14,.035,.035);
-  let arm=new T.Group();arm.position.set(.27,.63,0);body.add(arm);box(arm,p.trim,0,0,.28,.11,.11,.63);g.userData.arm=arm;
- }else if(type==='n'){
-  box(body,p.cloth,0,.62,0,.32,.30,.62);for(let x of [-.12,.12])for(let z of [-.23,.23])box(body,p.armor,x,.33,z,.09,.47,.10);
-  let neck=box(body,p.armor,0,.88,.24,.24,.48,.22);neck.rotation.x=-.45;
-  box(body,p.armor,0,1.08,.37,.24,.22,.38);for(let x of [-.085,.085]){mesh(body,'ConeGeometry',[.055,.18,4],p.armor,x,1.28,.25);ball(body,p.trim,x*1.5,1.12,.43,.029)}
-  box(body,p.trim,0,.81,-.04,.38,.08,.24);cyl(body,p.armor,0,1.01,-.09,.13,.32);ball(body,p.armor,0,1.25,-.09,.12);
-  let arm=new T.Group();arm.position.set(-.17,1.04,-.08);body.add(arm);let lance=cyl(arm,p.trim,0,0,.42,.025,1.25);lance.rotation.x=Math.PI/2;mesh(arm,'ConeGeometry',[.06,.22,4],p.armor,0,0,1.12).rotation.x=Math.PI/2;g.userData.arm=arm;
- }else{
-  let legs=[limb(body,p.armor,-.105,.65,0),limb(body,p.armor,.105,.65,0)];g.userData.legs=legs;
-  if(type==='p'){
-   box(body,p.cloth,0,.67,0,.29,.22,.24);box(body,p.armor,0,.86,0,.34,.30,.23);cyl(body,p.trim,0,.72,0,.19,.05);ball(body,p.armor,0,1.14,0,.16);box(body,p.cloth,0,1.16,.143,.23,.055,.025);box(body,p.trim,0,1.25,0,.035,.15,.25);
-  }else{
-   let h=type==='k'?1.05:.95;mesh(body,'ConeGeometry',[.28,.71,12],p.cloth,0,.65,0);cyl(body,p.armor,0,h-.12,0,.20,.38,.15);ball(body,p.armor,0,h+.20,0,.145);
-   if(type==='b'){mesh(body,'ConeGeometry',[.17,.44,4],p.armor,0,h+.48,0);box(body,p.trim,0,h+.44,.12,.025,.22,.025)}
-   else{cyl(body,p.trim,0,h+.33,0,.18,.09);for(let i=0;i<(type==='q'?7:4);i++){let a=i*Math.PI*2/(type==='q'?7:4);mesh(body,'ConeGeometry',[.047,type==='q'?.20:.14,4],p.trim,Math.cos(a)*.145,h+.46,Math.sin(a)*.145)}if(type==='k'){box(body,p.trim,0,h+.64,0,.045,.26,.045);box(body,p.trim,0,h+.67,0,.16,.045,.045)}}
-   box(body,p.cloth,0,h-.19,-.18,.35,.66,.045);
-  }
-  let arm=new T.Group();arm.position.set(-.23,type==='p'?.96:.91,0);body.add(arm);box(arm,p.armor,0,-.14,0,.11,.30,.12);
-  const staff=type==='b'||type==='q';cyl(arm,p.trim,0,-.1,.16,.025,staff?1.13:.50);if(staff){ball(arm,p.trim,0,.51,.16,.09);if(type==='q')mesh(arm,'OctahedronGeometry',[.12],p.cloth,0,.56,.16)}else{box(arm,p.trim,0,.06,.16,.24,.045,.06);mesh(arm,'ConeGeometry',[.045,.49,4],p.armor,0,.31,.16)}
-  box(body,p.cloth,.26,.81,.09,.10,.34,.28);box(body,p.trim,.32,.81,.09,.025,.29,.24);g.userData.arm=arm;
- }
- g.rotation.y=code[0]==='w'?Math.PI:0;pose(g,type==='p'?0:1);return g;
-}
-function pose(g,stand,walk=0){let d=g.userData;if(d.code[1]!=='p')return;d.body.position.y=-.26*(1-stand);d.body.rotation.x=.13*(1-stand);d.legs[0].rotation.x=-1.25*(1-stand)+walk*.65;d.legs[0].userData.knee.rotation.x=1.6*(1-stand)-Math.min(walk,0)*.6;d.legs[1].rotation.x=.8*(1-stand)-walk*.65;d.legs[1].userData.knee.rotation.x=.6*(1-stand)+Math.max(walk,0)*.6;}
+import { warrior, pose, setPieceMaterials, disposeWarrior } from './pieces.js';
+import { CameraGestures } from './camera-controls.js';
+import { createMaterials } from './materials.js';
+import { Destruction } from './destruction.js';
+export { warrior } from './pieces.js';
+const smooth=t=>t*t*(3-2*t),pos=i=>new T.Vector3(i%8-3.5,0,(i>>3)-3.5);
 export function captureStyle(code,victim,from,to,variant){const diagonal=from%8!==to%8&&(from>>3)!==(to>>3);if(code[1]==='n')return 'lance charge';if(code[1]==='r')return 'siege ram';if(code[1]==='b')return diagonal?'staff sweep':'staff thrust';if(code[1]==='q')return victim?.[1]==='r'?'royal shatter':'royal arc';if(code[1]==='k')return 'overhead cleave';return victim?.[1]==='n'?'low thrust':diagonal?(variant%2?'shield bash':'crosscut'):'forward thrust';}
-export class Battlefield{
- constructor(host,onSquare){this.host=host;this.units=new Map();this.tiles=[];this.scene=new T.Scene();this.scene.background=new T.Color('#151b20');this.scene.fog=new T.Fog('#151b20',18,34);this.camera=new T.PerspectiveCamera(39,1,.1,80);this.angle=.30;this.elevation=.88;this.distance=17;this.flip=false;
- this.renderer=new T.WebGLRenderer({antialias:true,alpha:false});this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.35;host.append(this.renderer.domElement);this.renderer.domElement.setAttribute('aria-label','3D chess battlefield. Tap a piece, then a highlighted square.');
- this.scene.add(new T.HemisphereLight('#c5dce7','#444032',2.1));let sun=new T.DirectionalLight('#ffdb9f',4);sun.position.set(-4,10,5);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7});sun.shadow.bias=-.001;this.scene.add(sun);let rim=new T.DirectionalLight('#8cbfea',2.3);rim.position.set(5,6,-5);this.scene.add(rim);
- box(this.scene,mat('#34312d'),0,-.22,0,8.65,.42,8.65);box(this.scene,mat('#bb9457',.7),0,-.07,0,8.38,.10,8.38);let floor=mesh(this.scene,'PlaneGeometry',[200,200],mat('#171d22',.1),0,-.46,0);floor.rotation.x=-Math.PI/2;
- for(let i=0;i<64;i++){let v=pos(i),m=mat(((i>>3)+i%8)%2?'#475b61':'#b2ad97',.15);let tile=box(this.scene,m,v.x,.005,v.z,.985,.12,.985);tile.userData.square=i;tile.userData.base=m.color.clone();this.tiles.push(tile)}
- this.labels=new T.Group();this.scene.add(this.labels);for(let i=0;i<8;i++){this.label('abcdefgh'[i],i-3.5,4.22);this.label(String(8-i),-4.23,i-3.5)}
- this.ray=new T.Raycaster();const hit=e=>{this.camera.updateMatrixWorld();this.scene.updateMatrixWorld();let r=this.renderer.domElement.getBoundingClientRect();this.ray.setFromCamera(new T.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1),this.camera);let h=this.ray.intersectObjects([...this.units.values(),...this.tiles],true)[0];if(!h)return null;let o=h.object;while(o&&o.userData.square===undefined)o=o.parent;return o?.userData.square??null};let down;
- this.renderer.domElement.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY,i:hit(e),orbit:e.button===2||e.altKey};this.renderer.domElement.setPointerCapture(e.pointerId)});
- this.renderer.domElement.addEventListener('pointermove',e=>{if(down?.orbit){this.angle-=(e.clientX-down.x)*.008;this.elevation=T.MathUtils.clamp(this.elevation+(e.clientY-down.y)*.006,.45,1.45);down.x=e.clientX;down.y=e.clientY;this.cameraUpdate()}});
- this.renderer.domElement.addEventListener('pointerup',e=>{if(!down)return;if(!down.orbit){let i=hit(e);if(i!==null){if(Math.hypot(e.clientX-down.x,e.clientY-down.y)>10&&down.i!==null){onSquare(down.i);onSquare(i)}else onSquare(i)}}down=null});this.renderer.domElement.addEventListener('pointercancel',()=>down=null);this.renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
- this.renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();this.distance=T.MathUtils.clamp(this.distance+e.deltaY*.008,11,21);this.cameraUpdate()},{passive:false});
- this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();this.renderer.setAnimationLoop(()=>this.renderer.render(this.scene,this.camera));this.count=0;
+function bevelBox(w,h,d,r=.035){const s=new T.Shape();s.moveTo(-w/2+r,-d/2);s.lineTo(w/2-r,-d/2);s.quadraticCurveTo(w/2,-d/2,w/2,-d/2+r);s.lineTo(w/2,d/2-r);s.quadraticCurveTo(w/2,d/2,w/2-r,d/2);s.lineTo(-w/2+r,d/2);s.quadraticCurveTo(-w/2,d/2,-w/2,d/2-r);s.lineTo(-w/2,-d/2+r);s.quadraticCurveTo(-w/2,-d/2,-w/2+r,-d/2);const g=new T.ExtrudeGeometry(s,{depth:h-r*2,bevelEnabled:true,bevelSegments:3,steps:1,bevelSize:r,bevelThickness:r,curveSegments:6});g.rotateX(-Math.PI/2);g.translate(0,-h/2+r,0);return g}
+export class Battlefield {
+ constructor(host,onSquare){
+  this.host=host;this.units=new Map();this.tiles=[];this.effects=[];this.count=0;this.flip=false;this.paused=false;this.angle=.3;this.elevation=.83;this.distance=17;this.target=new T.Vector3(0,.35,0);
+  this.scene=new T.Scene();this.scene.background=new T.Color('#121b22');this.scene.fog=new T.Fog('#121b22',65,140);this.camera=new T.PerspectiveCamera(39,1,.1,220);
+  this.renderer=new T.WebGLRenderer({antialias:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.shadowMap.autoUpdate=false;this.renderer.shadowMap.needsUpdate=true;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;host.append(this.renderer.domElement);
+  this.renderer.domElement.setAttribute('aria-label','3D chess. Tap to select and move. Drag to orbit. Pinch to zoom; two fingers to pan or twist.');
+  this.materials=createMaterials(this.renderer,this.scene);setPieceMaterials(this.materials.palettes);
+  this.scene.add(new T.HemisphereLight('#b8d1df','#3c3022',1.2));
+  const key=new T.DirectionalLight('#ffe1b2',3.4);key.position.set(-4,9,5);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-6,right:6,top:6,bottom:-6,near:.5,far:30});key.shadow.bias=-.0005;key.shadow.normalBias=.018;key.shadow.radius=3;this.scene.add(key);
+  const rim=new T.DirectionalLight('#83b9e2',2.1);rim.position.set(4,5,-6);this.scene.add(rim);
+  const add=(geometry,material,x,y,z)=>{let m=new T.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;this.scene.add(m);return m};
+  add(bevelBox(8.95,.38,8.95,.08),this.materials.wood,0,-.26,0);add(bevelBox(8.8,.05,8.8,.018),this.materials.trim,0,-.075,0);add(bevelBox(8.70,.11,8.70,.025),this.materials.edge,0,-.015,0);
+  const tileGeometry=bevelBox(.992,.09,.992,.009);
+  for(let i=0;i<64;i++){const p=pos(i),material=(((i>>3)+i%8)%2?this.materials.darkTile:this.materials.lightTile).clone();let tile=add(tileGeometry,material,p.x,.022,p.z);tile.userData={square:i,base:material.color.clone()};this.tiles.push(tile)}
+  for(let x of[-4.18,4.18])for(let z of[-4.18,4.18]){add(new T.CylinderGeometry(.065,.065,.018,24),this.materials.trim,x,.053,z);let ring=new T.Mesh(new T.TorusGeometry(.10,.008,6,32),this.materials.trim);ring.rotation.x=-Math.PI/2;ring.position.set(x,.05,z);this.scene.add(ring)}
+  let floor=add(new T.PlaneGeometry(240,240),new T.MeshStandardMaterial({color:'#151e25',roughness:.76}),0,-.49,0);floor.rotation.x=-Math.PI/2;
+  for(let i=0;i<8;i++){this.label('abcdefgh'[i],i-3.5,4.20);this.label(String(8-i),-4.20,i-3.5);this.label('abcdefgh'[i],i-3.5,-4.20,Math.PI);this.label(String(8-i),4.20,i-3.5,Math.PI)}
+  this.ray=new T.Raycaster();
+  this.gestures=new CameraGestures(this.renderer.domElement,{
+   tap:e=>{let i=this.hit(e);if(i!==null)onSquare(i)},
+   orbit:(dx,dy)=>{this.angle-=dx*.006;this.elevation=T.MathUtils.clamp(this.elevation+dy*.006,.12,1.54);this.cameraUpdate()},
+   zoom:ratio=>this.zoom(ratio),pan:(dx,dy)=>this.pan(dx,dy)
+  });
+  this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();let last=performance.now();
+  this.renderer.setAnimationLoop(now=>{let dt=Math.min(.1,Math.max(0,(now-last)/1000));last=now;this.gestures.update(dt);if(!this.paused){if(this.effects.length)this.renderer.shadowMap.needsUpdate=true;for(let effect of [...this.effects])if(!effect.update(dt)){effect.dispose();this.effects.splice(this.effects.indexOf(effect),1)}this.shake=Math.max(0,(this.shake||0)-dt)}const saved=this.camera.position.clone();if(this.shake&&!this.paused){const a=this.shake/.26*.055;this.camera.position.x+=Math.sin(now*.09)*a;this.camera.position.y+=Math.cos(now*.12)*a*.6}this.renderer.render(this.scene,this.camera);this.camera.position.copy(saved)});
  }
- label(text,x,z){let c=document.createElement('canvas');c.width=c.height=64;let ctx=c.getContext('2d');ctx.fillStyle='#d2b47d';ctx.font='40px Georgia';ctx.textAlign='center';ctx.fillText(text,32,45);let texture=new T.CanvasTexture(c);let m=new T.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false});let plane=new T.Mesh(new T.PlaneGeometry(.25,.25),m);plane.rotation.x=-Math.PI/2;plane.position.set(x,.005,z);this.labels.add(plane)}
- resize(){let w=this.host.clientWidth,h=this.host.clientHeight;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();this.cameraUpdate()}
- cameraUpdate(){let a=this.angle+(this.flip?Math.PI:0),d=this.distance/Math.min(1,this.camera.aspect*1.03);this.camera.position.set(Math.sin(a)*Math.cos(this.elevation)*d,Math.sin(this.elevation)*d,Math.cos(a)*Math.cos(this.elevation)*d);this.camera.lookAt(0,.1,0);this.scene.fog.near=d+5;this.scene.fog.far=d+45;this.camera.far=Math.max(80,d+60);this.camera.updateProjectionMatrix()}
- sync(game,selected,flipped,last){this.flip=flipped;this.cameraUpdate();for(let [i,g]of this.units){if(game.b[i]!==g.userData.code){this.scene.remove(g);this.units.delete(i)}}for(let i=0;i<64;i++)if(game.b[i]&&!this.units.has(i)){let g=warrior(game.b[i]);g.position.copy(pos(i));g.userData.square=i;this.units.set(i,g);this.scene.add(g)}let legal=selected<0?[]:game.legal().filter(m=>m.f===selected).map(m=>m.t);for(let i=0;i<64;i++){let tile=this.tiles[i];tile.material.color.copy(tile.userData.base);tile.material.emissive.set(i===selected?'#a47e2b':legal.includes(i)?'#396e56':last&&(last.f===i||last.t===i)?'#4c4521':'#000000');if(game.b[i]===game.turn+'k'&&game.check())tile.material.emissive.set('#a62d24')}
- }
- tween(ms,fn){return new Promise(resolve=>{let elapsed=0,last=performance.now();const tick=now=>{if(!this.paused)elapsed+=now-last;last=now;let t=Math.min(1,elapsed/ms);fn(t);if(t<1)requestAnimationFrame(tick);else resolve()};requestAnimationFrame(tick)})}
- async animate(game,m,speed,onEvent){if(speed==='skip'||matchMedia('(prefers-reduced-motion: reduce)').matches)return;let g=this.units.get(m.f);if(!g)return;const pawn=g.userData.code[1]==='p',type=g.userData.code[1],from=pos(m.f),to=pos(m.t),victimIndex=m.ep?m.t+(game.turn==='w'?8:-8):m.t,victim=this.units.get(victimIndex),original=g.rotation.y,k=speed==='fast'?.32:1,dir=to.clone().sub(from).normalize(),yaw=Math.atan2(dir.x,dir.z),style=captureStyle(g.userData.code,victim?.userData.code,m.f,m.t,this.count++);let target=to.clone();if(victim)target.addScaledVector(dir,-.42);
- try{
-  if(pawn){onEvent('Pawn rises from guard');await this.tween(300*k,t=>pose(g,smooth(t)))}
-  g.rotation.y=yaw;onEvent(victim?style: type==='n'?'Knight advances':'Army advances');
-  await this.tween((420+from.distanceTo(to)*105)*k,t=>{g.position.lerpVectors(from,target,smooth(t));if(pawn)pose(g,1,Math.sin(t*Math.PI*2*Math.max(2,Math.ceil(from.distanceTo(to)*2))));if(type==='n'){g.position.y=Math.sin(Math.PI*t)*.25;g.userData.body.rotation.x=Math.sin(t*20)*.06}});
-  if(victim){onEvent(style,true);let arm=g.userData.arm,base=arm?.rotation.clone(),armOrigin=arm?.position.clone();let victimBody=victim.userData.body;const sweep=/sweep|arc|crosscut/.test(style),bash=/bash|ram|charge/.test(style);await this.tween(680*k,t=>{let impact=Math.max(0,(t-.4)/.6),swing=Math.sin(t*Math.PI),thrust=/thrust/.test(style);if(arm){arm.rotation.x=base.x+(style==='overhead cleave'?-2.8:thrust?-1.55:sweep?-.6:bash?-.15:-1.4)*swing;arm.rotation.z=base.z+(sweep?2.3:.15)*swing;arm.rotation.y=base.y+(sweep?1.5:0)*swing;arm.position.z=armOrigin.z+(thrust?.35:.08)*swing;arm.position.y=armOrigin.y+(style==='low thrust'?-.24:0)*swing}g.userData.body.rotation.x=(bash?.40:.16)*Math.sin(t*Math.PI);g.position.copy(target).addScaledVector(dir,Math.sin(t*Math.PI)*(bash?.30:.14));victimBody.rotation.x=victim.userData.code[1]==='r'?0:-smooth(impact)*1.45;victimBody.rotation.z=victim.userData.code[1]==='n'?smooth(impact)*1.1:0;victim.position.copy(to).addScaledVector(dir,.22*smooth(impact));if(m.ep)victim.position.copy(pos(victimIndex)).addScaledVector(dir,.22*smooth(impact));victim.scale.setScalar(1-smooth(impact)*.9);if(t>.45)victim.position.y=-smooth(impact)*.2;});if(arm){arm.rotation.copy(base);arm.position.copy(armOrigin)}victim.visible=false;g.userData.body.rotation.set(0,0,0);await this.tween(200*k,t=>g.position.lerpVectors(target,to,smooth(t)));
+ hit(e){this.camera.updateMatrixWorld();this.scene.updateMatrixWorld();const r=this.renderer.domElement.getBoundingClientRect();this.ray.setFromCamera(new T.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1),this.camera);let h=this.ray.intersectObjects([...this.units.values()].filter(o=>o.visible).concat(this.tiles),true)[0];if(!h)return null;let o=h.object;while(o&&o.userData.square===undefined)o=o.parent;return o?.userData.square??null}
+ label(text,x,z,rotation=0){const c=document.createElement('canvas');c.width=c.height=96;const ctx=c.getContext('2d');ctx.fillStyle='#c6ad79';ctx.font='56px Georgia';ctx.textAlign='center';ctx.fillText(text,48,66);let texture=new T.CanvasTexture(c);texture.colorSpace=T.SRGBColorSpace;const mesh=new T.Mesh(new T.PlaneGeometry(.20,.20),new T.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false}));mesh.rotation.set(-Math.PI/2,0,rotation);mesh.position.set(x,.053,z);this.scene.add(mesh)}
+ resize(){let w=Math.max(1,this.host.clientWidth),h=Math.max(1,this.host.clientHeight);this.renderer.setSize(w,h);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();this.fitBoard()}
+ fitBoard(){this.gestures?.stop();this.target.set(0,.35,0);const a=this.angle+(this.flip?Math.PI:0),forward=new T.Vector3(Math.sin(a)*Math.cos(this.elevation),Math.sin(this.elevation),Math.cos(a)*Math.cos(this.elevation));const right=new T.Vector3().crossVectors(new T.Vector3(0,1,0),forward).normalize(),up=new T.Vector3().crossVectors(forward,right),tanY=Math.tan(T.MathUtils.degToRad(this.camera.fov/2)),tanX=tanY*this.camera.aspect;let distance=0;for(let x of[-4.55,4.55])for(let z of[-4.55,4.55])for(let y of[-.5,1.9]){let p=new T.Vector3(x,y,z).sub(this.target),depth=p.dot(forward);distance=Math.max(distance,depth+Math.abs(p.dot(right))/(tanX*.88),depth+Math.abs(p.dot(up))/(tanY*.76))}this.distance=distance;this.cameraUpdate()}
+ setView(angle,elevation){this.angle=angle;this.elevation=elevation;this.fitBoard()}
+ rotate(amount){this.gestures.stop();this.angle+=amount;this.cameraUpdate()}
+ zoom(ratio){this.distance=T.MathUtils.clamp(this.distance*ratio,4.5,85);this.cameraUpdate()}
+ pan(dx,dy){const scale=2*this.distance*Math.tan(T.MathUtils.degToRad(this.camera.fov/2))/this.host.clientHeight,a=this.angle+(this.flip?Math.PI:0);this.target.x+=(-Math.cos(a)*dx-Math.sin(a)*dy)*scale;this.target.z+=(Math.sin(a)*dx-Math.cos(a)*dy)*scale;this.target.x=T.MathUtils.clamp(this.target.x,-4,4);this.target.z=T.MathUtils.clamp(this.target.z,-4,4);this.cameraUpdate()}
+ cameraUpdate(){const a=this.angle+(this.flip?Math.PI:0),d=Math.max(this.distance,.65/Math.sin(this.elevation));this.camera.position.set(this.target.x+Math.sin(a)*Math.cos(this.elevation)*d,this.target.y+Math.sin(this.elevation)*d,this.target.z+Math.cos(a)*Math.cos(this.elevation)*d);this.camera.lookAt(this.target);this.scene.fog.near=d+25;this.scene.fog.far=d+90;this.camera.far=d+150;this.camera.updateProjectionMatrix()}
+ sync(game,selected,flipped,last){this.renderer.shadowMap.needsUpdate=true;if(this.flip!==flipped){this.flip=flipped;this.cameraUpdate()}for(let [i,g]of this.units)if(game.b[i]!==g.userData.code){this.scene.remove(g);disposeWarrior(g);this.units.delete(i)}for(let i=0;i<64;i++)if(game.b[i]&&!this.units.has(i)){const g=warrior(game.b[i]);g.position.copy(pos(i));g.userData.square=i;this.units.set(i,g);this.scene.add(g)}const legal=selected<0?[]:game.legal().filter(m=>m.f===selected).map(m=>m.t);for(let i=0;i<64;i++){this.tiles[i].material.emissive.set(i===selected?'#926a23':legal.includes(i)?'#246148':last&&(last.f===i||last.t===i)?'#3c321a':'#000000');if(game.b[i]===game.turn+'k'&&game.check())this.tiles[i].material.emissive.set('#9b2723')}}
+ tween(ms,fn){return new Promise(resolve=>{let elapsed=0,last=performance.now();const tick=now=>{if(!this.paused){elapsed+=now-last;this.renderer.shadowMap.needsUpdate=true;}last=now;let t=Math.min(1,elapsed/ms);fn(t);if(t<1)requestAnimationFrame(tick);else resolve()};requestAnimationFrame(tick)})}
+ async animate(game,m,speed,onEvent){
+  if(speed==='skip'||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const g=this.units.get(m.f);if(!g)return;const pawn=g.userData.code[1]==='p',type=g.userData.code[1],from=pos(m.f),to=pos(m.t),vi=m.ep?m.t+(game.turn==='w'?8:-8):m.t,victim=this.units.get(vi),original=g.rotation.y,k=speed==='fast'?.48:1,style=captureStyle(g.userData.code,victim?.userData.code,m.f,m.t,this.count++),body=g.userData.body,arm=g.userData.arm;
+  // Aim at the solid torso, never at a bounding box enlarged by a lance or crown.
+  const impactCenter=victim?pos(vi).add(new T.Vector3(0,({p:.70,n:.90,r:.62,b:1.0,q:1.0,k:1.03})[victim.userData.code[1]],0)):to.clone();const direction=(victim?pos(vi):to).clone().sub(from).normalize(),yaw=Math.atan2(direction.x,direction.z),bash=/bash|ram|charge/.test(style),sweep=/sweep|arc|crosscut/.test(style);let approach=to.clone(),reach=g.userData.weaponTip?.length()||.7;
+  if(victim){const dy=impactCenter.y-(arm?.position.y||.8),dx=arm?.position.x||0;const gap=Math.sqrt(Math.max(.10,reach*reach-dy*dy-dx*dx))+(arm?.position.z||0)+.18+(bash?.22:.14);approach.copy(pos(vi)).addScaledVector(direction,-gap)}
+  let armBase=arm?.quaternion.clone(),trail;
+  try{
+   if(pawn){onEvent('Pawn rises from guard');await this.tween(320*k,t=>pose(g,smooth(t)))}
+   g.rotation.y=yaw;onEvent(victim?'Closing to striking distance':type==='n'?'Knight advances':'Army advances');
+   await this.tween((380+from.distanceTo(approach)*135)*k,t=>{g.position.lerpVectors(from,approach,smooth(t));if(pawn)pose(g,1,Math.sin(t*Math.PI*2*Math.max(2,Math.ceil(from.distanceTo(approach)*2))));if(type==='n'){g.position.y=Math.abs(Math.sin(t*15))*.09;body.rotation.x=Math.sin(t*15)*.045}});
+   g.position.copy(approach);body.rotation.set(0,0,0);
+   if(victim){
+    const contact=impactCenter.clone().addScaledVector(direction,-.18),lunge=bash?.22:.14,impactRoot=approach.clone().addScaledVector(direction,lunge);
+    g.position.copy(impactRoot);g.updateWorldMatrix(true,true);let local=body.worldToLocal(contact.clone()).sub(arm.position).normalize(),axis=g.userData.weaponTip.clone().normalize(),contactQ=new T.Quaternion().setFromUnitVectors(axis,local);g.position.copy(approach);
+    const windQ=new T.Quaternion().setFromEuler(new T.Euler(bash?-.25:-1.05,sweep?-.9:0,sweep?-1.3:-.32));
+    onEvent(style+' · wind-up');await this.tween(460*k,t=>{arm.quaternion.slerpQuaternions(armBase,windQ,smooth(t));body.rotation.y=(sweep?-.5:-.12)*smooth(t);body.rotation.x=-.12*smooth(t);g.position.copy(approach).addScaledVector(direction,-.10*smooth(t))});
+    const trailGeometry=new T.BufferGeometry();trailGeometry.setAttribute('position',new T.BufferAttribute(new Float32Array(16*3),3));trailGeometry.setDrawRange(0,0);const trailMaterial=new T.LineBasicMaterial({color:'#f1d9a2',transparent:true,opacity:.7,depthWrite:false});trail=new T.Line(trailGeometry,trailMaterial);trail.frustumCulled=false;this.scene.add(trail);const trailPoints=[];
+    onEvent(style+' · strike');await this.tween(150*k,t=>{const snap=t*t*t;body.rotation.y=(sweep?-.5:-.12)*(1-snap);body.rotation.x=-.12*(1-snap);arm.quaternion.slerpQuaternions(windQ,contactQ,snap);g.position.lerpVectors(approach.clone().addScaledVector(direction,-.10),impactRoot,snap);g.updateWorldMatrix(true,true);trailPoints.push(arm.localToWorld(g.userData.weaponTip.clone()));if(trailPoints.length>16)trailPoints.shift();trailPoints.forEach((p,i)=>trailGeometry.attributes.position.setXYZ(i,p.x,p.y,p.z));trailGeometry.attributes.position.needsUpdate=true;trailGeometry.setDrawRange(0,trailPoints.length)});
+    body.rotation.set(0,0,0);g.position.copy(impactRoot);arm.quaternion.copy(contactQ);g.updateWorldMatrix(true,true);
+    this.lastContactError=arm.localToWorld(g.userData.weaponTip.clone()).distanceTo(contact);
+    onEvent('Impact · '+style,true);this.shake=.26;const effect=new Destruction(this.scene,victim,direction);effect.hold=.07;this.effects.push(effect);
+    // Contact is held briefly before the follow-through so the blow reads at full-board scale.
+    await this.tween(80*k,()=>{});
+    const follow=contactQ.clone().multiply(new T.Quaternion().setFromEuler(new T.Euler(.40,sweep?.65:0,sweep?.55:0)));
+    await this.tween(270*k,t=>{arm.quaternion.slerpQuaternions(contactQ,follow,smooth(t));body.rotation.x=.12*Math.sin(t*Math.PI);body.rotation.y=sweep?.30*smooth(t):0;trailMaterial.opacity=.7*(1-t)});
+    await this.tween(280*k,t=>{arm.quaternion.slerpQuaternions(follow,armBase,smooth(t));body.rotation.set(.12*(1-t),sweep?.30*(1-t):0,0)});
+    // Advance only after the target has broken apart. The models never overlap at impact.
+    await this.tween(430*k,t=>{g.position.lerpVectors(impactRoot,to,smooth(t));if(pawn)pose(g,1,Math.sin(t*Math.PI*4))});
+    while(this.effects.includes(effect))await this.tween(60,()=>{});
+   }
+   if(m.castle){let rf=m.t>m.f?m.f+3:m.f-4,rt=(m.f+m.t)/2,rook=this.units.get(rf);if(rook)await this.tween(450*k,t=>rook.position.lerpVectors(pos(rf),pos(rt),smooth(t)))}
+   g.position.copy(to);g.rotation.y=original;if(pawn){onEvent('Pawn returns to kneeling guard');await this.tween(320*k,t=>pose(g,1-smooth(t)))}
+  }finally{
+   if(trail){this.scene.remove(trail);trail.geometry.dispose();trail.material.dispose()}
+   this.scene.remove(g);disposeWarrior(g);this.units.delete(m.f);if(victim){this.scene.remove(victim);disposeWarrior(victim);this.units.delete(vi)}if(m.castle){let rf=m.t>m.f?m.f+3:m.f-4;let rook=this.units.get(rf);if(rook){this.scene.remove(rook);disposeWarrior(rook)}this.units.delete(rf)}
   }
-  if(m.castle){let rf=m.t>m.f?m.f+3:m.f-4,rt=(m.f+m.t)/2,rook=this.units.get(rf);if(rook)await this.tween(450*k,t=>rook.position.lerpVectors(pos(rf),pos(rt),smooth(t)))}
-  g.position.copy(to);g.rotation.y=original;if(pawn){onEvent('Pawn returns to kneeling guard');await this.tween(320*k,t=>pose(g,1-smooth(t)))}
- }finally{this.scene.remove(g);this.units.delete(m.f);if(victim){this.scene.remove(victim);this.units.delete(victimIndex)}if(m.castle){let rf=m.t>m.f?m.f+3:m.f-4;this.scene.remove(this.units.get(rf));this.units.delete(rf)}}
  }
 }
