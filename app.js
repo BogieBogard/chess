@@ -1,7 +1,7 @@
 
-import { Battlefield } from './battlefield.js?v=20261021-overhead-icons-1';
+import { Battlefield } from './battlefield.js?v=20261022-staged-1';
 import Chess from './rules.js';
-import { animationOptions, loadPreferences, savePreferences } from './animation-options.js?v=20261021-park-1';
+import { animationOptions, loadPreferences, savePreferences } from './animation-options.js?v=20261022-staged-1';
 // UI and chess turn flow are independent of the 3D renderer.
 const $=id=>document.getElementById(id),names={p:'Pawn',r:'Siege tower',b:'Battle-priest',n:'Mounted knight',q:'Queen',k:'King'};
 function figure(p){return `<span style="font-size:36px">${{q:'♛',r:'♜',b:'♝',n:'♞'}[p[1]]}</span><span style="display:block;font-size:10px">${names[p[1]]}</span>`}
@@ -25,7 +25,7 @@ let activeAnimation=animationPrefs.selected;
 function animationMenu(){
  const visible=animationOptions.filter(o=>$('showDiscarded').checked||animationPrefs.ratings[o.id]!=='discard');
  if(!visible.some(o=>o.id===animationPrefs.selected))animationPrefs.selected=visible.some(o=>o.id===activeAnimation)?activeAnimation:visible[0]?.id||'instant';
- $('animationStyle').replaceChildren(...visible.map(o=>{const option=document.createElement('option');option.value=o.id;option.textContent=o.name+(animationPrefs.ratings[o.id]==='keep'?' · Kept':animationPrefs.ratings[o.id]==='discard'?' · Discarded':'');return option}));
+ const groups=new Map();for(const o of visible){const group=o.group||(['glide','crossfade','shrink','sink','hop','arc','instant'].includes(o.id)?'Minimal movement':'Original & earlier experiments');if(!groups.has(group)){const node=document.createElement('optgroup');node.label=group;groups.set(group,node)}const option=document.createElement('option');option.value=o.id;option.textContent=o.name+(animationPrefs.ratings[o.id]==='keep'?' · Kept':animationPrefs.ratings[o.id]==='discard'?' · Discarded':'');groups.get(group).append(option)}$('animationStyle').replaceChildren(...groups.values());
  $('animationStyle').value=animationPrefs.selected;
  const option=animationOptions.find(o=>o.id===animationPrefs.selected);
  $('animationDescription').textContent=option.description;
@@ -36,7 +36,7 @@ function rememberAnimation(){const available=animationPrefs.ratings[animationPre
 $('animationStyle').onchange=()=>{animationPrefs.selected=$('animationStyle').value;rememberAnimation()};
 $('showDiscarded').onchange=animationMenu;
 for(const [id,rating] of [['keepAnimation','keep'],['discardAnimation','discard'],['resetAnimation','unrated']])$(id).onclick=()=>{animationPrefs.ratings[animationPrefs.selected]=rating;if(rating==='discard'&&activeAnimation===animationPrefs.selected){activeAnimation=animationOptions.find(o=>animationPrefs.ratings[o.id]!=='discard')?.id||'instant';animationPrefs.selected=activeAnimation}rememberAnimation()};
-$('previewAnimation').onclick=()=>{const frame=$('animationPreview');frame.hidden=false;frame.src='./animation-preview.html?v=20261021-park-1&style='+encodeURIComponent(animationPrefs.selected)+'&attacker='+encodeURIComponent($('previewPiece').value)+'&speed='+encodeURIComponent($('animationSpeed').value)+'&replay='+Date.now()};
+$('previewAnimation').onclick=()=>{const frame=$('animationPreview');frame.hidden=false;frame.src='./animation-preview.html?v=20261022-staged-1&style='+encodeURIComponent(animationPrefs.selected)+'&defender='+encodeURIComponent($('previewDefender').value)+'&attacker='+encodeURIComponent($('previewPiece').value)+'&speed='+encodeURIComponent($('animationSpeed').value)+'&replay='+Date.now()};
 animationMenu();
 function setInterface(style){if(!['classic','minimal','gallery'].includes(style))style='classic';document.body.dataset.interface=style;$('interfaceStyle').value=style;try{animationStorage?.setItem('iron-ivory-interface-v1',style)}catch{}}
 let savedInterface;try{savedInterface=animationStorage?.getItem('iron-ivory-interface-v1')}catch{}

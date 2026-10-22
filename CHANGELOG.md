@@ -1,5 +1,13 @@
 # Daily improvements
 
+## 2026-10-22
+- Researched Sketchfab models for armored characters, conventional chess sets and park seating; recorded source links, listed licenses, triangle counts and evaluation notes in MODEL_RESEARCH.md. No third-party models imported.
+- Added three independent capture scripts: Crown breaker, Sweep & finish, and Rift unweave. Regional geometry is split from the actual model before movement, with capped cuts and retained materials.
+- Added head/leg detachment, standing partial damage, a sideways fall and grounded finishing blow, and a ranged spiral disassembly sequence. No new Original Duel profiles.
+- Preview now supports all six defender types, Pause/Resume and Replay. Keep/Discard choices remain intact; new sequences are grouped separately from older experiments.
+
+- Validation: 20 tests pass, including all 108 new scene/attacker/defender combinations, cut-volume conservation, contact targeting, resource cleanup, en passant/castling, reduced motion and preference preservation. Browser checks cover all three stories, pause/resume and the grouped menu.
+
 ## 2026-10-21
 - Removed all capture screen/camera shake, including the obsolete CSS shake animation.
 - Added eight selectable animation styles: Quiet glide (default), Crossfade, Miniature, Sink away, Small hop, Curved glide, Original duel, and No animation.
@@ -30,5 +38,5 @@
 - Explore additional minimal, elegant overall UI designs that look and feel great on mobile; compare layout, navigation, menus, typography, and interaction, not just colors.
 - Design principle: simplify interaction and reduce visible clutter while committing to a strong visual personality. Keep navigation intuitive and friction low; avoid bland, generic AI UI styling.
 - Matt explicitly authorized shipping these improvements on 2026-10-21.
-- Animation direction: Original Duel is the approved baseline. Focus experiments on expressive combat choreography and destruction; quiet slides/fades are not the creative target.
+- Animation direction updated 2026-10-22: no more variations of Original Duel. Invent wholly distinct scene scripts, partial hits and effects; preserve existing saved choices.
 - Never restore capture screen/camera shake.

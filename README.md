@@ -14,7 +14,7 @@ The armies use detailed procedural marble and metal models: articulated armored 
 
 Pawns rise from a kneeling guard before walking. Captures approach to weapon reach, wind up, accelerate into contact, briefly hold the impact, and follow through. Targets fracture from their actual model geometry into solid chunks with capped cut surfaces; fragments scatter, rotate, bounce, and fade with dust, impact light, and layered stone-and-metal audio. Attack direction and piece type drive the choreography. The castle has no horizontal ram: its captures use a quick surge with a vertical wall of force. Fractures are prepared before movement so impact does not block the strike. The attacker advances into the captured square after the target has broken apart, then pawns kneel again.
 
-Settings offers twelve animation styles with repeatable previews and saved Keep/Discard ratings. Original Duel is the default. Quickdraw, Executioner, Feint & Finish, and Whirlwind offer different combat choreography without screen shake. Animation speed and sound are configurable. See CHANGELOG.md for daily improvements and future direction. Reduced-motion preferences skip movement and impact effects. A keyboard-accessible board is available by tabbing past the camera controls. WebGL is required for the 3D scene; a text board remains available if renderer creation fails.
+Settings offers fifteen animation styles with repeatable previews and saved Keep/Discard ratings. Original Duel remains the default for new preferences. Three independent staged captures now sit in their own comparison group: Crown breaker removes the head before destroying the body; Sweep & finish cuts the legs, drops the body sideways and finishes it on the ground; Rift unweave remotely extracts and consumes separate regions. These are separate scene scripts, not Original Duel profiles. Preview includes attacker/defender selection, Pause/Resume and Replay. Quickdraw, Executioner, Feint & Finish, and Whirlwind offer different combat choreography without screen shake. Animation speed and sound are configurable. See CHANGELOG.md for daily improvements and future direction. Reduced-motion preferences skip movement and impact effects. A keyboard-accessible board is available by tabbing past the camera controls. WebGL is required for the 3D scene; a text board remains available if renderer creation fails.
 
 Settings also offers a park with afternoon or golden-hour lighting, a studio backdrop, and lighter graphics for phones. One board square represents 5cm; the 40cm board sits on a 75cm-wide, 74cm-high stone chess table. Park view frames the table and surroundings; Fit board returns to the game. Trees use instanced geometry.
 
@@ -28,6 +28,9 @@ No build or package installation is required. Run `npm run preview` and open htt
 - `camera-controls.js`: tap/orbit separation, pinch, pan, twist, and momentum.
 - `pieces.js`: articulated models, rigid-part batching, and model resource disposal.
 - `materials.js`: procedural surfaces and studio environment reflections.
+- `staged-damage.js`: capped regional model cuts, detached-section physics and precomputed regional bursts.
+- `staged-captures.js`: independent capture scene scripts.
+- `MODEL_RESEARCH.md`: Sketchfab model shortlist and adoption evaluation notes.
 - `destruction.js`: solid geometry fracture, debris physics, dust, fading, and cleanup.
 - `vendor/`: Three.js 0.180.0 and its MIT license, served locally.
 

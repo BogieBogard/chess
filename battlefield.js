@@ -3,6 +3,7 @@ import { warrior, pose, setPieceMaterials, disposeWarrior } from './pieces.js?v=
 import { CameraGestures } from './camera-controls.js';
 import { createMaterials } from './materials.js';
 import { Destruction } from './destruction.js?v=20261021-park-1';
+import { animateStaged, stagedStyles } from './staged-captures.js?v=20261022-staged-1';
 import { duelProfiles } from './duel-profiles.js?v=20261021-park-1';
 import { createPark } from './park-environment.js?v=20261021-park-1';
 export { warrior } from './pieces.js?v=20261021-park-1';
@@ -130,7 +131,7 @@ for(let i=0;i<64;i++){this.tiles[i].material.emissive.set(i===selected?'#926a23'
  }
  async animate(game,m,speed,onEvent,animation='duel'){
   if(animation==='instant'||speed==='skip'||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const g=this.units.get(m.f);if(!g)return;const pawn=g.userData.code[1]==='p',type=g.userData.code[1],from=pos(m.f),to=pos(m.t),vi=m.ep?m.t+(game.turn==='w'?8:-8):m.t,victim=this.units.get(vi),original=g.rotation.y,k=speed==='fast'?.48:1,style=captureStyle(g.userData.code,victim?.userData.code,m.f,m.t,this.count++),body=g.userData.body,arm=g.userData.arm;
+  const g=this.units.get(m.f);if(!g)return;if(stagedStyles.includes(animation))return animateStaged(this,game,m,speed,onEvent,animation);const pawn=g.userData.code[1]==='p',type=g.userData.code[1],from=pos(m.f),to=pos(m.t),vi=m.ep?m.t+(game.turn==='w'?8:-8):m.t,victim=this.units.get(vi),original=g.rotation.y,k=speed==='fast'?.48:1,style=captureStyle(g.userData.code,victim?.userData.code,m.f,m.t,this.count++),body=g.userData.body,arm=g.userData.arm;
   const profile=duelProfiles[animation];
   if(!profile)return this.animateSimple(game,m,speed,onEvent,animation);
   if(type==='r')return this.animateRook(game,m,speed,onEvent,profile);

@@ -1,4 +1,7 @@
 export const animationOptions = [
+ {id:'crown-breaker',group:'New staged captures',name:'Crown breaker',description:'Sever the head. Leave the body standing. Crosscut the torso, then finish the remaining stone.'},
+ {id:'sweep-finish',group:'New staged captures',name:'Sweep & finish',description:'Cut out the legs, watch the body fall onto its side, then strike the grounded torso.'},
+ {id:'rift-unweave',group:'New staged captures',name:'Rift unweave',description:'A ranged seal extracts the head, torso and legs into separate spiraling rifts. No sword lunge.'},
  {id:'duel',name:'Original duel',description:'The original full combat choreography: weapon contact, follow-through, and shattered stone.'},
  {id:'duel-quickdraw',name:'Quickdraw',description:'A short tell, a fast weapon snap, and a clean recovery.'},
  {id:'duel-heavy',name:'Executioner',description:'A long, loaded wind-up, a heavy lunge, and a larger debris burst.'},
@@ -15,7 +18,7 @@ export const animationOptions = [
 export function loadPreferences(storage){
  try{const saved=JSON.parse(storage.getItem('iron-ivory-animations-v1')||'{}');
  const ratings=Object.fromEntries(animationOptions.map(o=>[o.id,['keep','discard'].includes(saved.ratings?.[o.id])?saved.ratings[o.id]:'unrated']));
- const selected=animationOptions.some(o=>o.id===saved.selected&&ratings[o.id]!=='discard')?saved.selected:animationOptions.find(o=>ratings[o.id]!=='discard')?.id||'instant';
+ const selected=animationOptions.some(o=>o.id===saved.selected&&ratings[o.id]!=='discard')?saved.selected:ratings.duel!=='discard'?'duel':animationOptions.find(o=>ratings[o.id]!=='discard')?.id||'instant';
  return {selected,ratings};}catch{return {selected:'duel',ratings:{}};}
 }
 export function savePreferences(storage,preferences){try{storage.setItem('iron-ivory-animations-v1',JSON.stringify(preferences));return true;}catch{return false;}}

@@ -17,6 +17,8 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 011 | Legal-move highlights miss valid moves, including a pawn’s initial double advance. | Shipped 2026-10-21: clear unlit destination markers and labels; both initial advances verified for every pawn on both sides. |
 | 012 | Park view is missing from the menu. | Shipped 2026-10-21: direct Park view actions in both the welcome/new-game menu and in-game Menu; selecting it enables the park if Studio was selected. |
 | 013 | In Overhead view, overlay piece icons so every occupied position is easy to understand. | Shipped 2026-10-21: contrasting white/black chess-symbol badges track pieces, appear in overhead views and hide in other camera views. |
+| 014 | Search Sketchfab for great chess-piece and environment models. | Researched 2026-10-22: MODEL_RESEARCH.md records six candidates, listing metadata and integration evaluation; no external assets imported. |
+| 015 | Stop variations of Original Duel. Build entirely different, bold sequences: partial head/body/leg hits, falls onto the side and finishing blows. | Shipped 2026-10-22: Crown breaker, Sweep & finish and Rift unweave use independent scene scripts and a regional-damage model. Tested across all attacker/defender combinations; saved choices retained. |
 
 ## Working rules
 
@@ -24,4 +26,4 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 - Ship small tested changes, keep the daily log, and update queue status after verifying the live deployment.
 - Preserve approved styles and saved choices. Never re-enable discarded variants automatically.
 - Keep camera motion comfortable; never add capture screen shake.
-- Animation experiments should build on combat choreography, not quiet slides or fades.
+- Latest animation direction (2026-10-22): do not make more Original Duel variations. New experiments must have distinct sequences/effects, regional damage, staged hits or wholly different movement. Retain Original Duel and saved choices as legacy options, not the template for new scenes.
