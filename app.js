@@ -1,6 +1,7 @@
 
 import { Battlefield } from './battlefield.js';
 import Chess from './rules.js';
+import { animationOptions, loadPreferences, savePreferences } from './animation-options.js';
 // UI and chess turn flow are independent of the 3D renderer.
 const $=id=>document.getElementById(id),names={p:'Pawn',r:'Siege tower',b:'Battle-priest',n:'Mounted knight',q:'Queen',k:'King'};
 function figure(p){return `<span style="font-size:36px">${{q:'♛',r:'♜',b:'♝',n:'♞'}[p[1]]}</span><span style="display:block;font-size:10px">${names[p[1]]}</span>`}
@@ -17,6 +18,29 @@ function render(){let last=history.length?history.at(-1).move:null;battlefield?.
 async function tap(i){if(paused||busy||ended||mode==='ai'&&game.turn!==human)return;if(selected>=0){let options=game.legal().filter(m=>m.f===selected&&m.t===i);if(options.length){let move=options[0];if(options.length>1){busy=true;$('promotion').hidden=false;$('promotionChoices').innerHTML='';move=await new Promise(resolve=>options.forEach(m=>{let b=document.createElement('button');b.innerHTML=figure(game.turn+m.promotion);b.title=names[m.promotion];b.onclick=()=>{$('promotion').hidden=true;resolve(m)};$('promotionChoices').append(b)}));busy=false}await execute(move);return}}selected=game.b[i]?.[0]===game.turn?i:-1;render()}
 // Animation system: movement and duel phases remain independent of game state.
 
+let animationStorage;try{animationStorage=window.localStorage}catch{}
+const animationPrefs=loadPreferences(animationStorage);
+let activeAnimation=animationPrefs.selected;
+function animationMenu(){
+ const visible=animationOptions.filter(o=>$('showDiscarded').checked||animationPrefs.ratings[o.id]!=='discard');
+ if(!visible.some(o=>o.id===animationPrefs.selected))animationPrefs.selected=visible.some(o=>o.id===activeAnimation)?activeAnimation:visible[0]?.id||'instant';
+ $('animationStyle').replaceChildren(...visible.map(o=>{const option=document.createElement('option');option.value=o.id;option.textContent=o.name+(animationPrefs.ratings[o.id]==='keep'?' · Kept':animationPrefs.ratings[o.id]==='discard'?' · Discarded':'');return option}));
+ $('animationStyle').value=animationPrefs.selected;
+ const option=animationOptions.find(o=>o.id===animationPrefs.selected);
+ $('animationDescription').textContent=option.description;
+ $('animationRating').textContent='Rating: '+(animationPrefs.ratings[option.id]||'unrated');
+ $('discardAnimation').disabled=option.id==='instant';
+}
+function rememberAnimation(){const available=animationPrefs.ratings[animationPrefs.selected]!=='discard';if(available)activeAnimation=animationPrefs.selected;const saved=savePreferences(animationStorage,{...animationPrefs,selected:activeAnimation});animationMenu();if(!saved)$('animationRating').textContent+=' · Browser storage unavailable; choices last for this visit.';}
+$('animationStyle').onchange=()=>{animationPrefs.selected=$('animationStyle').value;rememberAnimation()};
+$('showDiscarded').onchange=animationMenu;
+for(const [id,rating] of [['keepAnimation','keep'],['discardAnimation','discard'],['resetAnimation','unrated']])$(id).onclick=()=>{animationPrefs.ratings[animationPrefs.selected]=rating;if(rating==='discard'&&activeAnimation===animationPrefs.selected){activeAnimation=animationOptions.find(o=>animationPrefs.ratings[o.id]!=='discard')?.id||'instant';animationPrefs.selected=activeAnimation}rememberAnimation()};
+$('previewAnimation').onclick=()=>{const frame=$('animationPreview');frame.hidden=false;frame.src='./animation-preview.html?style='+encodeURIComponent(animationPrefs.selected)+'&speed='+encodeURIComponent($('animationSpeed').value)+'&replay='+Date.now()};
+animationMenu();
+function setInterface(style){if(!['classic','minimal','gallery'].includes(style))style='classic';document.body.dataset.interface=style;$('interfaceStyle').value=style;try{animationStorage?.setItem('iron-ivory-interface-v1',style)}catch{}}
+let savedInterface;try{savedInterface=animationStorage?.getItem('iron-ivory-interface-v1')}catch{}
+setInterface(savedInterface);
+$('interfaceStyle').onchange=()=>setInterface($('interfaceStyle').value);
 let audio;
 function sound(kind){if(mute)return;try{
  audio??=new (window.AudioContext||window.webkitAudioContext)();audio.resume();const now=audio.currentTime;
@@ -28,7 +52,7 @@ function sound(kind){if(mute)return;try{
  }
  const o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);o.frequency.setValueAtTime(kind==='check'?440:180,now);o.frequency.exponentialRampToValueAtTime(90,now+.15);g.gain.setValueAtTime(.04,now);g.gain.exponentialRampToValueAtTime(.001,now+.22);o.start();o.stop(now+.23);
 }catch{}}
-async function animate(m){await battlefield?.animate(game,m,speed,(label,impact)=>{$('duelState').textContent='⚔ '+label[0].toUpperCase()+label.slice(1);if(impact)sound('clash')});$('duelState').textContent='Drag to orbit · Pinch to zoom · Tap to move'}
+async function animate(m){await battlefield?.animate(game,m,speed,(label,impact)=>{$('duelState').textContent='⚔ '+label[0].toUpperCase()+label.slice(1);if(impact)sound('clash')},activeAnimation);$('duelState').textContent='Drag to orbit · Pinch to zoom · Tap to move'}
 async function execute(m){busy=true;selected=-1;let san=game.san(m);$('undoBtn').disabled=true;$('resignBtn').disabled=true;$('startBtn').disabled=true;try{await animate(m)}catch(error){console.error('Animation interrupted',error)}finally{$('startBtn').disabled=false;}history.push({state:game.clone(),move:m,taken:[...taken],ended});let capt=game.play(m);if(capt)taken.push(capt);notation.push(san);ended=game.result();busy=false;if(rotating&&mode==='local')flipped=game.turn==='b';render();if(game.check())sound('check');if(ended)showResult();else think()}
 function showResult(){$('resultTitle').textContent=ended.split(' · ')[0];$('resultText').textContent=ended.includes(' · ')?ended.split(' · ').slice(1).join(' · '):ended;$('resultDialog').hidden=false}
 // AI module runs in a Blob worker; iterative deepening alpha-beta with capture ordering.
@@ -37,7 +61,7 @@ const values={p:100,n:320,b:335,r:500,q:900,k:0};let deadline;function evaluate(
 function think(){if(ended||mode!=='ai'||game.turn===human)return;busy=true;render();worker?.terminate();worker=new Worker(URL.createObjectURL(new Blob([aiSource],{type:'text/javascript'})));let id=++job;worker.onmessage=e=>{if(e.data.id!==job)return;busy=false;if(e.data.move){if(paused)pendingAi=e.data.move;else execute(e.data.move)}};worker.onerror=()=>{busy=false;let moves=game.legal();if(moves.length){if(paused)pendingAi=moves[0];else execute(moves[0])}};worker.postMessage({state:game,level,id})}
 function start(){pendingAi=null;paused=false;if(battlefield)battlefield.paused=false;document.body.classList.add('playing');$('pauseDialog').hidden=true;worker?.terminate();job++;game=new Chess();history=[];notation=[];taken=[];selected=-1;ended=null;busy=false;human=choiceColor==='random'?(Math.random()<.5?'w':'b'):choiceColor;rotating=$('rotate').checked;flipped=mode==='ai'?human==='b':false;$('menu').hidden=true;$('resultDialog').hidden=true;render();think()}
 function segmented(id,callback){$(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{$(id).querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));callback(b.dataset.value)})}segmented('modeChoice',v=>{mode=v;$('difficultyField').hidden=v==='local';$('colorField').hidden=v==='local';$('rotateField').hidden=v!=='local'});segmented('levelChoice',v=>level=v);segmented('colorChoice',v=>choiceColor=v);
-$('startBtn').onclick=start;$('newBtn').onclick=()=>{if(!busy){setPaused(true);$('menu').hidden=false}};$('closeMenu').onclick=()=>{$('menu').hidden=true;resume()};$('flipBtn').onclick=()=>{if(!busy){flipped=!flipped;render()}};$('undoBtn').onclick=()=>{if(busy||!history.length)return;worker?.terminate();job++;let count=mode==='ai'&&history.length>=2?2:1;while(count--&&history.length){let h=history.pop();game=h.state;taken=h.taken;ended=h.ended;notation.pop()}selected=-1;ended=null;if(rotating&&mode==='local')flipped=game.turn==='b';render();think()};$('resignBtn').onclick=()=>{if(ended||busy)return;ended='Resignation · '+(game.turn==='w'?'Black':'White')+' wins';render();showResult()};$('playAgain').onclick=()=>{$('resultDialog').hidden=true;$('menu').hidden=false};$('reviewBtn').onclick=()=>{$('resultDialog').hidden=true};function setMute(value){mute=value;$('soundBtn').textContent=mute?'♪ Sound off':'♪ Sound on';$('soundSetting').checked=!mute} $('soundBtn').onclick=()=>setMute(!mute);$('soundSetting').onchange=e=>setMute(!e.target.checked);$('settingsBtn').onclick=()=>{setPaused(true);$('settings').hidden=false;$('rotateSetting').checked=rotating};function closeSettings(){$('settings').hidden=true;resume();speed=$('animationSpeed').value;rotating=$('rotateSetting').checked;$('rotate').checked=rotating}$('closeSettings').onclick=closeSettings;$('doneSettings').onclick=closeSettings;function setPaused(value){paused=value;if(battlefield)battlefield.paused=value;}
+$('startBtn').onclick=start;$('newBtn').onclick=()=>{if(!busy){setPaused(true);$('menu').hidden=false}};$('closeMenu').onclick=()=>{$('menu').hidden=true;resume()};$('flipBtn').onclick=()=>{if(!busy){flipped=!flipped;render()}};$('undoBtn').onclick=()=>{if(busy||!history.length)return;worker?.terminate();job++;let count=mode==='ai'&&history.length>=2?2:1;while(count--&&history.length){let h=history.pop();game=h.state;taken=h.taken;ended=h.ended;notation.pop()}selected=-1;ended=null;if(rotating&&mode==='local')flipped=game.turn==='b';render();think()};$('resignBtn').onclick=()=>{if(ended||busy)return;ended='Resignation · '+(game.turn==='w'?'Black':'White')+' wins';render();showResult()};$('playAgain').onclick=()=>{$('resultDialog').hidden=true;$('menu').hidden=false};$('reviewBtn').onclick=()=>{$('resultDialog').hidden=true};function setMute(value){mute=value;$('soundBtn').textContent=mute?'♪ Sound off':'♪ Sound on';$('soundSetting').checked=!mute} $('soundBtn').onclick=()=>setMute(!mute);$('soundSetting').onchange=e=>setMute(!e.target.checked);$('settingsBtn').onclick=()=>{setPaused(true);$('settings').hidden=false;$('rotateSetting').checked=rotating};function closeSettings(){$('settings').hidden=true;$('animationPreview').src='about:blank';$('animationPreview').hidden=true;speed=$('animationSpeed').value;rotating=$('rotateSetting').checked;$('rotate').checked=rotating;resume()}$('closeSettings').onclick=closeSettings;$('doneSettings').onclick=closeSettings;function setPaused(value){paused=value;if(battlefield)battlefield.paused=value;}
 function resume(){setPaused(false);$('pauseDialog').hidden=true;if(pendingAi){let m=pendingAi;pendingAi=null;execute(m)}}
 function pause(){setPaused(true);$('pauseNew').disabled=busy;$('pauseDialog').hidden=false;}
 $('pauseBtn').onclick=pause;$('resumeBtn').onclick=resume;

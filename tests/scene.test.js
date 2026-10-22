@@ -29,3 +29,18 @@ test('all six attackers make weapon contact before the target shatters',async()=
  }
  delete globalThis.matchMedia;
 });
+
+test('quiet animation styles complete captures, en passant, and castling without moving the camera',async()=>{
+ const {Battlefield}=await import('../battlefield.js');globalThis.matchMedia=()=>({matches:false});
+ for(const style of ['glide','crossfade','shrink','sink','hop','arc'])for(const move of [{f:36,t:29},{f:28,t:21,ep:true},{f:60,t:62,castle:true}]){
+  const b=Object.create(Battlefield.prototype),scene=new T.Scene(),camera=new T.PerspectiveCamera(),attacker=warrior(move.castle?'wk':'wp'),victim=warrior(move.castle?'wr':'bp'),vi=move.castle?63:move.ep?29:move.t;
+  camera.position.set(2,10,14);const before=camera.position.clone();
+  attacker.position.set(move.f%8-3.5,0,(move.f>>3)-3.5);victim.position.set(vi%8-3.5,0,(vi>>3)-3.5);scene.add(attacker,victim);
+  Object.assign(b,{scene,camera,units:new Map([[move.f,attacker],[vi,victim]]),effects:[],count:0});
+  b.tween=async(ms,fn)=>{for(const t of[0,.25,.5,.75,1])fn(t)};
+  await b.animate({turn:'w'},move,'full',()=>{},style);
+  assert.deepEqual(camera.position,before);assert.equal(b.units.size,0);assert.equal(b.effects.length,0);
+  assert.ok(attacker.position.distanceTo(new T.Vector3(move.t%8-3.5,0,(move.t>>3)-3.5))<1e-8);
+ }
+ delete globalThis.matchMedia;
+});

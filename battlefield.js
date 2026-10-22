@@ -31,7 +31,7 @@ export class Battlefield {
    zoom:ratio=>this.zoom(ratio),pan:(dx,dy)=>this.pan(dx,dy)
   });
   this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();let last=performance.now();
-  this.renderer.setAnimationLoop(now=>{let dt=Math.min(.1,Math.max(0,(now-last)/1000));last=now;this.gestures.update(dt);if(!this.paused){if(this.effects.length)this.renderer.shadowMap.needsUpdate=true;for(let effect of [...this.effects])if(!effect.update(dt)){effect.dispose();this.effects.splice(this.effects.indexOf(effect),1)}this.shake=Math.max(0,(this.shake||0)-dt)}const saved=this.camera.position.clone();if(this.shake&&!this.paused){const a=this.shake/.26*.055;this.camera.position.x+=Math.sin(now*.09)*a;this.camera.position.y+=Math.cos(now*.12)*a*.6}this.renderer.render(this.scene,this.camera);this.camera.position.copy(saved)});
+  this.renderer.setAnimationLoop(now=>{let dt=Math.min(.1,Math.max(0,(now-last)/1000));last=now;this.gestures.update(dt);if(!this.paused){if(this.effects.length)this.renderer.shadowMap.needsUpdate=true;for(let effect of [...this.effects])if(!effect.update(dt)){effect.dispose();this.effects.splice(this.effects.indexOf(effect),1)}}this.renderer.render(this.scene,this.camera)});
  }
  hit(e){this.camera.updateMatrixWorld();this.scene.updateMatrixWorld();const r=this.renderer.domElement.getBoundingClientRect();this.ray.setFromCamera(new T.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1),this.camera);let h=this.ray.intersectObjects([...this.units.values()].filter(o=>o.visible).concat(this.tiles),true)[0];if(!h)return null;let o=h.object;while(o&&o.userData.square===undefined)o=o.parent;return o?.userData.square??null}
  label(text,x,z,rotation=0){const c=document.createElement('canvas');c.width=c.height=96;const ctx=c.getContext('2d');ctx.fillStyle='#c6ad79';ctx.font='56px Georgia';ctx.textAlign='center';ctx.fillText(text,48,66);let texture=new T.CanvasTexture(c);texture.colorSpace=T.SRGBColorSpace;const mesh=new T.Mesh(new T.PlaneGeometry(.20,.20),new T.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false}));mesh.rotation.set(-Math.PI/2,0,rotation);mesh.position.set(x,.053,z);this.scene.add(mesh)}
@@ -44,9 +44,29 @@ export class Battlefield {
  cameraUpdate(){const a=this.angle+(this.flip?Math.PI:0),d=Math.max(this.distance,.65/Math.sin(this.elevation));this.camera.position.set(this.target.x+Math.sin(a)*Math.cos(this.elevation)*d,this.target.y+Math.sin(this.elevation)*d,this.target.z+Math.cos(a)*Math.cos(this.elevation)*d);this.camera.lookAt(this.target);this.scene.fog.near=d+25;this.scene.fog.far=d+90;this.camera.far=d+150;this.camera.updateProjectionMatrix()}
  sync(game,selected,flipped,last){this.renderer.shadowMap.needsUpdate=true;if(this.flip!==flipped){this.flip=flipped;this.cameraUpdate()}for(let [i,g]of this.units)if(game.b[i]!==g.userData.code){this.scene.remove(g);disposeWarrior(g);this.units.delete(i)}for(let i=0;i<64;i++)if(game.b[i]&&!this.units.has(i)){const g=warrior(game.b[i]);g.position.copy(pos(i));g.userData.square=i;this.units.set(i,g);this.scene.add(g)}const legal=selected<0?[]:game.legal().filter(m=>m.f===selected).map(m=>m.t);for(let i=0;i<64;i++){this.tiles[i].material.emissive.set(i===selected?'#926a23':legal.includes(i)?'#246148':last&&(last.f===i||last.t===i)?'#3c321a':'#000000');if(game.b[i]===game.turn+'k'&&game.check())this.tiles[i].material.emissive.set('#9b2723')}}
  tween(ms,fn){return new Promise(resolve=>{let elapsed=0,last=performance.now();const tick=now=>{if(!this.paused){elapsed+=now-last;this.renderer.shadowMap.needsUpdate=true;}last=now;let t=Math.min(1,elapsed/ms);fn(t);if(t<1)requestAnimationFrame(tick);else resolve()};requestAnimationFrame(tick)})}
- async animate(game,m,speed,onEvent){
-  if(speed==='skip'||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ async animateSimple(game,m,speed,onEvent,style){
+  const g=this.units.get(m.f),from=pos(m.f),to=pos(m.t),vi=m.ep?m.t+(game.turn==='w'?8:-8):m.t,victim=this.units.get(vi),k=speed==='fast'?.48:1;
+  const owned=[];
+  const fade=(unit,opacity)=>{if(!unit)return;if(!unit.userData.previewMaterials){unit.userData.previewMaterials=[];unit.traverse(o=>{if(!o.isMesh)return;const clone=material=>{const copy=material.clone();copy.transparent=true;owned.push(copy);unit.userData.previewMaterials.push(copy);return copy};o.material=Array.isArray(o.material)?o.material.map(clone):clone(o.material)})}for(const material of unit.userData.previewMaterials){material.opacity=opacity;material.depthWrite=opacity>.5}};
+  try{
+   onEvent(victim?'Capture · '+style:'Move · '+style);
+   if(victim)await this.tween(300*k,t=>{const u=smooth(t);if(style==='shrink')victim.scale.setScalar(1-u*.98);else if(style==='sink')victim.position.y=-1.8*u;else fade(victim,1-u)});
+   if(victim)victim.visible=false;
+   if(style==='crossfade'){
+    await this.tween(220*k,t=>fade(g,1-smooth(t)));g.position.copy(to);
+    await this.tween(220*k,t=>fade(g,smooth(t)));
+   }else await this.tween(600*k,t=>{const u=smooth(t);g.position.lerpVectors(from,to,u);if(style==='hop')g.position.y=.28*Math.sin(Math.PI*u);if(style==='arc'){const dx=to.x-from.x,dz=to.z-from.z,length=Math.hypot(dx,dz)||1;g.position.x+=-dz/length*.3*Math.sin(Math.PI*u);g.position.z+=dx/length*.3*Math.sin(Math.PI*u)}});
+   g.position.copy(to);
+   if(m.castle){const rf=m.t>m.f?m.f+3:m.f-4,rook=this.units.get(rf);if(rook)await this.tween(450*k,t=>rook.position.lerpVectors(pos(rf),pos((m.f+m.t)/2),smooth(t)))}
+  }finally{
+   for(const i of new Set([m.f,...(victim?[vi]:[]),...(m.castle?[m.t>m.f?m.f+3:m.f-4]:[])])){const unit=this.units.get(i);if(unit){this.scene.remove(unit);disposeWarrior(unit);this.units.delete(i)}}
+   for(const material of owned)material.dispose();
+  }
+ }
+ async animate(game,m,speed,onEvent,animation='duel'){
+  if(animation==='instant'||speed==='skip'||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const g=this.units.get(m.f);if(!g)return;const pawn=g.userData.code[1]==='p',type=g.userData.code[1],from=pos(m.f),to=pos(m.t),vi=m.ep?m.t+(game.turn==='w'?8:-8):m.t,victim=this.units.get(vi),original=g.rotation.y,k=speed==='fast'?.48:1,style=captureStyle(g.userData.code,victim?.userData.code,m.f,m.t,this.count++),body=g.userData.body,arm=g.userData.arm;
+  if(animation!=='duel')return this.animateSimple(game,m,speed,onEvent,animation);
   // Aim at the solid torso, never at a bounding box enlarged by a lance or crown.
   const impactCenter=victim?pos(vi).add(new T.Vector3(0,({p:.70,n:.90,r:.62,b:1.0,q:1.0,k:1.03})[victim.userData.code[1]],0)):to.clone();const direction=(victim?pos(vi):to).clone().sub(from).normalize(),yaw=Math.atan2(direction.x,direction.z),bash=/bash|ram|charge/.test(style),sweep=/sweep|arc|crosscut/.test(style);let approach=to.clone(),reach=g.userData.weaponTip?.length()||.7;
   if(victim){const dy=impactCenter.y-(arm?.position.y||.8),dx=arm?.position.x||0;const gap=Math.sqrt(Math.max(.10,reach*reach-dy*dy-dx*dx))+(arm?.position.z||0)+.18+(bash?.22:.14);approach.copy(pos(vi)).addScaledVector(direction,-gap)}
@@ -65,7 +85,7 @@ export class Battlefield {
     onEvent(style+' · strike');await this.tween(150*k,t=>{const snap=t*t*t;body.rotation.y=(sweep?-.5:-.12)*(1-snap);body.rotation.x=-.12*(1-snap);arm.quaternion.slerpQuaternions(windQ,contactQ,snap);g.position.lerpVectors(approach.clone().addScaledVector(direction,-.10),impactRoot,snap);g.updateWorldMatrix(true,true);trailPoints.push(arm.localToWorld(g.userData.weaponTip.clone()));if(trailPoints.length>16)trailPoints.shift();trailPoints.forEach((p,i)=>trailGeometry.attributes.position.setXYZ(i,p.x,p.y,p.z));trailGeometry.attributes.position.needsUpdate=true;trailGeometry.setDrawRange(0,trailPoints.length)});
     body.rotation.set(0,0,0);g.position.copy(impactRoot);arm.quaternion.copy(contactQ);g.updateWorldMatrix(true,true);
     this.lastContactError=arm.localToWorld(g.userData.weaponTip.clone()).distanceTo(contact);
-    onEvent('Impact · '+style,true);this.shake=.26;const effect=new Destruction(this.scene,victim,direction);effect.hold=.07;this.effects.push(effect);
+    onEvent('Impact · '+style,true);const effect=new Destruction(this.scene,victim,direction);effect.hold=.07;this.effects.push(effect);
     // Contact is held briefly before the follow-through so the blow reads at full-board scale.
     await this.tween(80*k,()=>{});
     const follow=contactQ.clone().multiply(new T.Quaternion().setFromEuler(new T.Euler(.40,sweep?.65:0,sweep?.55:0)));
