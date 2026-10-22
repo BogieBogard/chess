@@ -12,4 +12,6 @@
 - Add a realistically scaled little chess table in a full-size park setting, inspired by Central Park in NYC. Preserve believable camera perspective and piece/table/environment proportions.
 - Provide graphics and environment styles/toggles for comparison, using the same preview and Keep/Discard approach as animations. Matt chooses which experiments to retain.
 - Explore additional minimal, elegant overall UI designs that look and feel great on mobile; compare layout, navigation, menus, typography, and interaction, not just colors.
+- Design principle: simplify interaction and reduce visible clutter while committing to a strong visual personality. Keep navigation intuitive and friction low; avoid bland, generic AI UI styling.
+- Matt explicitly authorized shipping these improvements on 2026-10-21.
 - Never restore capture screen/camera shake.
