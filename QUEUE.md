@@ -16,6 +16,7 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 010 | Keep incoming ideas organized, consecutive, and in context; knock them out in order. | Active workflow: this numbered queue is canonical. |
 | 011 | Legal-move highlights miss valid moves, including a pawn’s initial double advance. | Shipped 2026-10-21: clear unlit destination markers and labels; both initial advances verified for every pawn on both sides. |
 | 012 | Park view is missing from the menu. | Shipped 2026-10-21: direct Park view actions in both the welcome/new-game menu and in-game Menu; selecting it enables the park if Studio was selected. |
+| 013 | In Overhead view, overlay piece icons so every occupied position is easy to understand. | Shipped 2026-10-21: contrasting white/black chess-symbol badges track pieces, appear in overhead views and hide in other camera views. |
 
 ## Working rules
 

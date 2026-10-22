@@ -22,6 +22,8 @@
 
 - Added direct Park view actions to the welcome/new-game menu and in-game Menu, including automatic switching from Studio to Park when requested.
 
+- Added high-contrast chess-piece badges in Overhead view; icons track moving pieces, distinguish white from black, and hide in other views.
+
 ## Direction for future improvements
 - Continue refining the park setting and its realistic table/environment proportions; it is park-inspired, not a replica of Central Park.
 - Provide graphics and environment styles/toggles for comparison, using the same preview and Keep/Discard approach as animations. Matt chooses which experiments to retain.

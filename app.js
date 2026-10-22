@@ -1,5 +1,5 @@
 
-import { Battlefield } from './battlefield.js?v=20261021-park-1';
+import { Battlefield } from './battlefield.js?v=20261021-overhead-icons-1';
 import Chess from './rules.js';
 import { animationOptions, loadPreferences, savePreferences } from './animation-options.js?v=20261021-park-1';
 // UI and chess turn flow are independent of the 3D renderer.

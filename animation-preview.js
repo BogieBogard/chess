@@ -1,4 +1,4 @@
-import { Battlefield } from './battlefield.js?v=20261021-park-1';
+import { Battlefield } from './battlefield.js?v=20261021-overhead-icons-1';
 import { animationOptions } from './animation-options.js?v=20261021-park-1';
 const status=document.getElementById('status'),params=new URLSearchParams(location.search);
 try{

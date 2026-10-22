@@ -13,7 +13,7 @@ export class Battlefield {
  constructor(host,onSquare){
   this.host=host;this.units=new Map();this.tiles=[];this.effects=[];this.count=0;this.flip=false;this.paused=false;this.angle=.3;this.elevation=.83;this.distance=17;this.target=new T.Vector3(0,.35,0);
   this.scene=new T.Scene();this.scene.background=new T.Color('#121b22');this.scene.fog=new T.Fog('#121b22',65,140);this.camera=new T.PerspectiveCamera(39,1,.1,220);
-  this.renderer=new T.WebGLRenderer({antialias:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.shadowMap.autoUpdate=false;this.renderer.shadowMap.needsUpdate=true;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;host.append(this.renderer.domElement);
+  this.renderer=new T.WebGLRenderer({antialias:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.shadowMap.autoUpdate=false;this.renderer.shadowMap.needsUpdate=true;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;host.append(this.renderer.domElement);this.iconLayer=document.createElement('div');this.iconLayer.className='piece-icon-layer';this.iconLayer.setAttribute('aria-hidden','true');this.iconLayer.hidden=true;host.append(this.iconLayer);this.unitIcons=new Map();
   this.renderer.domElement.setAttribute('aria-label','3D chess. Tap to select and move. Drag to orbit. Pinch to zoom; two fingers to pan or twist.');
   this.materials=createMaterials(this.renderer,this.scene);setPieceMaterials(this.materials.palettes);
   this.ambient=new T.HemisphereLight('#b8d1df','#3c3022',1.2);this.scene.add(this.ambient);
@@ -33,7 +33,7 @@ export class Battlefield {
    zoom:ratio=>this.zoom(ratio),pan:(dx,dy)=>this.pan(dx,dy)
   });
   this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();let last=performance.now();
-  this.renderer.setAnimationLoop(now=>{let dt=Math.min(.1,Math.max(0,(now-last)/1000));last=now;this.gestures.update(dt);if(!this.paused){if(this.effects.length)this.renderer.shadowMap.needsUpdate=true;for(let effect of [...this.effects])if(!effect.update(dt)){effect.dispose();this.effects.splice(this.effects.indexOf(effect),1)}}this.renderer.render(this.scene,this.camera)});
+  this.renderer.setAnimationLoop(now=>{let dt=Math.min(.1,Math.max(0,(now-last)/1000));last=now;this.gestures.update(dt);if(!this.paused){if(this.effects.length)this.renderer.shadowMap.needsUpdate=true;for(let effect of [...this.effects])if(!effect.update(dt)){effect.dispose();this.effects.splice(this.effects.indexOf(effect),1)}}this.renderer.render(this.scene,this.camera);this.updatePieceIcons()});
  }
  setEnvironment(style){
   if(!['studio','park','sunset'].includes(style))style='studio';
@@ -51,6 +51,21 @@ export class Battlefield {
  }
  parkView(){this.gestures.stop();this.angle=.25;this.elevation=.22;this.target.set(0,8,0);this.distance=70;this.cameraUpdate()}
  setGraphics(quality){this.renderer.shadowMap.enabled=quality!=='light';this.renderer.setPixelRatio(Math.min(devicePixelRatio,quality==='light'?1:1.8));this.renderer.shadowMap.needsUpdate=true;}
+ updatePieceIcons(){
+  const overhead=this.elevation>=1.35;this.iconLayer.hidden=!overhead;if(!overhead)return;
+  const symbols={p:'♟',n:'♞',b:'♝',r:'♜',q:'♛',k:'♚'},names={p:'Pawn',n:'Knight',b:'Bishop',r:'Rook',q:'Queen',k:'King'},w=this.host.clientWidth,h=this.host.clientHeight;
+  const cell=new T.Vector3(.5,0,0).project(this.camera).sub(new T.Vector3(-.5,0,0).project(this.camera));
+  const size=Math.max(20,Math.min(38,Math.hypot(cell.x*w/2,cell.y*h/2)*.72));
+  const liveUnits=new Set(this.units.values());
+  for(const [unit,icon] of this.unitIcons)if(!liveUnits.has(unit)){icon.remove();this.unitIcons.delete(unit)}
+  for(const unit of this.units.values()){
+   let icon=this.unitIcons.get(unit);const code=unit.userData.code;
+   if(!icon){icon=document.createElement('span');icon.className='piece-icon '+(code[0]==='w'?'ivory':'obsidian');icon.textContent=symbols[code[1]];icon.title=(code[0]==='w'?'White ':'Black ')+names[code[1]];this.iconLayer.append(icon);this.unitIcons.set(unit,icon)}
+   const point=unit.position.clone().setY(.12).project(this.camera);
+   icon.hidden=!unit.visible||Math.abs(point.x)>1||Math.abs(point.y)>1||point.z< -1||point.z>1;
+   icon.style.left=(point.x+1)*w/2+'px';icon.style.top=(1-point.y)*h/2+'px';icon.style.width=icon.style.height=size+'px';icon.style.fontSize=size*.78+'px';
+  }
+ }
  hit(e){this.camera.updateMatrixWorld();this.scene.updateMatrixWorld();const r=this.renderer.domElement.getBoundingClientRect();this.ray.setFromCamera(new T.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1),this.camera);let h=this.ray.intersectObjects([...this.units.values()].filter(o=>o.visible).concat(this.tiles),true)[0];if(!h)return null;let o=h.object;while(o&&o.userData.square===undefined)o=o.parent;return o?.userData.square??null}
  label(text,x,z,rotation=0){const c=document.createElement('canvas');c.width=c.height=96;const ctx=c.getContext('2d');ctx.fillStyle='#c6ad79';ctx.font='56px Georgia';ctx.textAlign='center';ctx.fillText(text,48,66);let texture=new T.CanvasTexture(c);texture.colorSpace=T.SRGBColorSpace;const mesh=new T.Mesh(new T.PlaneGeometry(.20,.20),new T.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false}));mesh.rotation.set(-Math.PI/2,0,rotation);mesh.position.set(x,.053,z);this.scene.add(mesh)}
  resize(){let w=Math.max(1,this.host.clientWidth),h=Math.max(1,this.host.clientHeight);this.renderer.setSize(w,h);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();this.fitBoard()}
