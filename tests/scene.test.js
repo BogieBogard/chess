@@ -20,12 +20,12 @@ test('Fit board keeps every corner and the tallest pieces visible on portrait an
   for(let x of[-4.55,4.55])for(let z of[-4.55,4.55])for(let y of[-.5,1.9]){const p=new T.Vector3(x,y,z).project(b.camera);assert.ok(Math.abs(p.x)<.89);assert.ok(Math.abs(p.y)<.77)}
  }
 });
-test('all six attackers make weapon contact before the target shatters',async()=>{
+test('every combat variant makes weapon contact for all attacker and target types',async()=>{
  const {Battlefield}=await import('../battlefield.js');globalThis.matchMedia=()=>({matches:false});
- for(let type of 'pnrbqk')for(let targetType of 'pnrbqk'){
+ for(const animation of ['duel','duel-quickdraw','duel-heavy','duel-combo','duel-whirlwind'])for(let type of 'pnrbqk')for(let targetType of 'pnrbqk'){
   const b=Object.create(Battlefield.prototype),scene=new T.Scene(),attacker=warrior('w'+type),victim=warrior('b'+targetType);attacker.position.set(.5,0,.5);victim.position.set(1.5,0,-.5);scene.add(attacker,victim);Object.assign(b,{scene,units:new Map([[36,attacker],[29,victim]]),effects:[],count:0,paused:false});
   b.tween=async(ms,fn)=>{for(let t of[0,.25,.5,.75,1]){fn(t);for(let effect of [...b.effects])if(!effect.update(.05)){effect.dispose();b.effects.splice(b.effects.indexOf(effect),1)}}};
-  await b.animate({turn:'w'},{f:36,t:29},'full',()=>{});assert.ok(b.lastContactError<.04,`${type} vs ${targetType}: contact error ${b.lastContactError}`);assert.equal(b.effects.length,0);assert.equal(b.units.size,0);
+  await b.animate({turn:'w'},{f:36,t:29},'full',()=>{},animation);assert.ok(b.lastContactError<.04,`${animation}: ${type} vs ${targetType}: contact error ${b.lastContactError}`);assert.equal(b.effects.length,0);assert.equal(b.units.size,0);
  }
  delete globalThis.matchMedia;
 });
@@ -43,4 +43,21 @@ test('quiet animation styles complete captures, en passant, and castling without
   assert.ok(attacker.position.distanceTo(new T.Vector3(move.t%8-3.5,0,(move.t>>3)-3.5))<1e-8);
  }
  delete globalThis.matchMedia;
+});
+
+test('every starting pawn shows both one-square and two-square destinations for both sides',async()=>{
+ const {Battlefield}=await import('../battlefield.js'),{default:Chess}=await import('../rules.js');
+ for(const side of ['w','b']){
+  const game=new Chess();game.turn=side;
+  const b=Object.create(Battlefield.prototype);Object.assign(b,{scene:new T.Scene(),renderer:{shadowMap:{}},flip:false,units:new Map(),tiles:Array.from({length:64},()=>({material:new T.MeshStandardMaterial()}))});
+  for(let file=0;file<8;file++){
+   const selected=(side==='w'?48:8)+file,direction=side==='w'?-8:8;
+   b.sync(game,selected,false,null);
+   const markers=b.moveMarkers.children.filter(m=>m.userData.kind==='move').map(m=>m.userData.square).sort((a,b)=>a-b);
+   assert.deepEqual(markers,[selected+direction,selected+direction*2].sort((a,b)=>a-b));
+   assert.ok(b.moveMarkers.children.every(m=>m.position.y>.067&&m.material.isMeshBasicMaterial));
+  }
+  game.b[side==='w'?40:16]=side+'n';b.sync(game,side==='w'?48:8,false,null);
+  assert.equal(b.moveMarkers.children.filter(m=>m.userData.kind==='move').length,0);
+ }
 });
