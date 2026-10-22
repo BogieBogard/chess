@@ -20,6 +20,8 @@
 
 - Added high-contrast, unlit destination markers for every legal move, capture rings, and explicit destination labels in the HUD and accessible board, including initial two-square pawn moves.
 
+- Added direct Park view actions to the welcome/new-game menu and in-game Menu, including automatic switching from Studio to Park when requested.
+
 ## Direction for future improvements
 - Continue refining the park setting and its realistic table/environment proportions; it is park-inspired, not a replica of Central Park.
 - Provide graphics and environment styles/toggles for comparison, using the same preview and Keep/Discard approach as animations. Matt chooses which experiments to retain.
