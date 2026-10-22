@@ -1,6 +1,7 @@
 # Daily improvements
 
 ## 2026-10-22
+- Added a discoverable Asset candidates section near the top of Settings, with six direct Sketchfab links and creator names. Added candidates.html as a mobile-friendly shortlist; links open a new tab to preserve the game.
 - Researched Sketchfab models for armored characters, conventional chess sets and park seating; recorded source links, listed licenses, triangle counts and evaluation notes in MODEL_RESEARCH.md. No third-party models imported.
 - Added three independent capture scripts: Crown breaker, Sweep & finish, and Rift unweave. Regional geometry is split from the actual model before movement, with capped cuts and retained materials.
 - Added head/leg detachment, standing partial damage, a sideways fall and grounded finishing blow, and a ranged spiral disassembly sequence. No new Original Duel profiles.
