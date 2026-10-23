@@ -22,6 +22,8 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 016 | Make asset candidates easy to view from a phone and the live page, with direct links in Settings. | Shipped 2026-10-22: six direct Sketchfab links near the top of Settings plus a mobile-friendly candidates page. |
 | 017 | Remove Park view; restore the missing Overhead view, including on small phones. | Shipped 2026-10-22: removed Park view from every menu and toolbar; Overhead is always available in the toolbar, welcome menu and in-game Menu. |
 
+| 018 | Follow-up to 004: compare graphics/environment settings with the same saved Keep/Discard approach as animations. | Implemented 2026-10-23: full-board candidate/saved comparison, explicit Use action, cancel restoration and saved ratings. Awaiting live verification. |
+
 ## Working rules
 
 - Ideas add to this queue; they do not interrupt or erase the current item unless Matt explicitly changes the priority.

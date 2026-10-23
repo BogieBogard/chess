@@ -1,5 +1,11 @@
 # Daily improvements
 
+## 2026-10-23
+- Added full-board setting comparison: choose a candidate in Settings, preview it, toggle against the saved setting without moving the camera, then use it or go back. Preview keeps the game paused.
+- Added persistent Keep/Discard ratings for afternoon, golden-hour and studio settings. Discarded settings stay hidden unless requested and cannot become active through preview. Existing saved setting is migrated; the final available setting cannot be discarded.
+- Kept rating controls collapsed for a simpler phone menu. Overhead and piece icons remain available; no Park view controls added.
+- Validation: 23 tests pass, including preference migration, reload persistence, discard fallback and unavailable storage. Browser checks cover 320px layout, preview/cancel, saved/candidate comparison, discarded-preview protection and explicit selection across reload.
+
 ## 2026-10-22
 - Corrected the Park view misunderstanding: removed every Park view menu/toolbar action. Restored Overhead below 380px and added direct Overhead actions to the welcome and in-game menus. The overhead piece-icon overlay remains available.
 - Added a discoverable Asset candidates section near the top of Settings, with six direct Sketchfab links and creator names. Added candidates.html as a mobile-friendly shortlist; links open a new tab to preserve the game.

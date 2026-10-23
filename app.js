@@ -1,3 +1,4 @@
+import { appearanceOptions, loadAppearance, saveAppearance, rateAppearance } from './appearance-options.js';
 
 import { Battlefield } from './battlefield.js?v=20261022-overhead-fix-1';
 import Chess from './rules.js';
@@ -41,9 +42,32 @@ function setInterface(style){if(!['classic','minimal','gallery'].includes(style)
 let savedInterface;try{savedInterface=animationStorage?.getItem('iron-ivory-interface-v1')}catch{}
 setInterface(savedInterface);
 $('interfaceStyle').onchange=()=>setInterface($('interfaceStyle').value);
-function setEnvironment(style){if(!['studio','park','sunset'].includes(style))style='park';battlefield?.setEnvironment(style);$('environmentStyle').value=style;try{animationStorage?.setItem('iron-ivory-environment-v1',style)}catch{}}
-let savedEnvironment,savedGraphics;try{savedEnvironment=animationStorage?.getItem('iron-ivory-environment-v1');savedGraphics=animationStorage?.getItem('iron-ivory-light-graphics-v1')}catch{}
-setEnvironment(savedEnvironment);$('environmentStyle').onchange=()=>setEnvironment($('environmentStyle').value);
+const appearancePrefs=loadAppearance(animationStorage);
+let appearanceCandidate=appearancePrefs.selected, comparingSaved=false;
+function applyAppearance(id){if(id)battlefield?.setEnvironment(id)}
+function appearanceMenu(){
+ const visible=appearanceOptions.filter(o=>$('showDiscardedSettings').checked||appearancePrefs.ratings[o.id]!=='discard');
+ if(!visible.some(o=>o.id===appearanceCandidate))appearanceCandidate=appearancePrefs.selected;
+ $('environmentStyle').replaceChildren(...visible.map(o=>{const el=document.createElement('option');el.value=o.id;el.textContent=o.name+(appearancePrefs.ratings[o.id]==='keep'?' · Kept':appearancePrefs.ratings[o.id]==='discard'?' · Discarded':'');return el}));
+ $('environmentStyle').value=appearanceCandidate;
+ const choice=appearanceOptions.find(o=>o.id===appearanceCandidate);
+ $('settingDescription').textContent=choice?.description||'No available setting.';
+ $('settingRating').textContent='Rating: '+(appearancePrefs.ratings[appearanceCandidate]||'unrated')+' · Saved: '+(appearanceOptions.find(o=>o.id===appearancePrefs.selected)?.name||'none');
+ $('discardSetting').disabled=appearanceOptions.filter(o=>appearancePrefs.ratings[o.id]!=='discard'&&o.id!==appearanceCandidate).length===0;
+ $('previewSetting').disabled=!choice;
+}
+function persistAppearance(){const saved=saveAppearance(animationStorage,appearancePrefs);appearanceMenu();if(!saved)$('settingRating').textContent+=' · Storage unavailable; saved for this visit only.'}
+function endAppearancePreview(){document.body.classList.remove('comparing-setting');applyAppearance(appearancePrefs.selected);$('appearancePreview').hidden=true;$('settings').hidden=false;appearanceMenu();$('previewSetting').focus()}
+$('environmentStyle').onchange=()=>{appearanceCandidate=$('environmentStyle').value;appearanceMenu()};
+$('showDiscardedSettings').onchange=appearanceMenu;
+for(const [id,rating] of [['keepSetting','keep'],['discardSetting','discard'],['resetSetting','unrated']])$(id).onclick=()=>{if(rateAppearance(appearancePrefs,appearanceCandidate,rating)){applyAppearance(appearancePrefs.selected);persistAppearance()}};
+$('previewSetting').onclick=()=>{document.body.classList.add('comparing-setting');comparingSaved=false;applyAppearance(appearanceCandidate);$('settings').hidden=true;$('appearancePreview').hidden=false;updateAppearancePreview();$('compareSetting').focus()};
+function updateAppearancePreview(){const current=comparingSaved?appearancePrefs.selected:appearanceCandidate;$('appearancePreviewName').textContent=(comparingSaved?'Saved · ':'Preview · ')+appearanceOptions.find(o=>o.id===current)?.name;$('compareSetting').textContent=comparingSaved?'Show candidate':'Compare saved';$('useSetting').disabled=appearancePrefs.ratings[appearanceCandidate]==='discard';$('useSetting').textContent=appearancePrefs.ratings[appearanceCandidate]==='discard'?'Discarded':comparingSaved?'Use candidate':'Use this setting'}
+$('compareSetting').onclick=()=>{comparingSaved=!comparingSaved;applyAppearance(comparingSaved?appearancePrefs.selected:appearanceCandidate);updateAppearancePreview()};
+$('backSetting').onclick=endAppearancePreview;
+$('useSetting').onclick=()=>{if(appearancePrefs.ratings[appearanceCandidate]==='discard')return;appearancePrefs.selected=appearanceCandidate;persistAppearance();endAppearancePreview()};
+applyAppearance(appearancePrefs.selected);appearanceMenu();
+let savedGraphics;try{savedGraphics=animationStorage?.getItem('iron-ivory-light-graphics-v1')}catch{}
 $('lightGraphics').checked=savedGraphics==='true';battlefield?.setGraphics($('lightGraphics').checked?'light':'full');
 $('lightGraphics').onchange=()=>{battlefield?.setGraphics($('lightGraphics').checked?'light':'full');try{animationStorage?.setItem('iron-ivory-light-graphics-v1',String($('lightGraphics').checked))}catch{}};
 let audio;
@@ -66,7 +90,7 @@ const values={p:100,n:320,b:335,r:500,q:900,k:0};let deadline;function evaluate(
 function think(){if(ended||mode!=='ai'||game.turn===human)return;busy=true;render();worker?.terminate();worker=new Worker(URL.createObjectURL(new Blob([aiSource],{type:'text/javascript'})));let id=++job;worker.onmessage=e=>{if(e.data.id!==job)return;busy=false;if(e.data.move){if(paused)pendingAi=e.data.move;else execute(e.data.move)}};worker.onerror=()=>{busy=false;let moves=game.legal();if(moves.length){if(paused)pendingAi=moves[0];else execute(moves[0])}};worker.postMessage({state:game,level,id})}
 function start(){pendingAi=null;paused=false;if(battlefield)battlefield.paused=false;document.body.classList.add('playing');$('pauseDialog').hidden=true;worker?.terminate();job++;game=new Chess();history=[];notation=[];taken=[];selected=-1;ended=null;busy=false;human=choiceColor==='random'?(Math.random()<.5?'w':'b'):choiceColor;rotating=$('rotate').checked;flipped=mode==='ai'?human==='b':false;$('menu').hidden=true;$('resultDialog').hidden=true;render();think()}
 function segmented(id,callback){$(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{$(id).querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));callback(b.dataset.value)})}segmented('modeChoice',v=>{mode=v;$('difficultyField').hidden=v==='local';$('colorField').hidden=v==='local';$('rotateField').hidden=v!=='local'});segmented('levelChoice',v=>level=v);segmented('colorChoice',v=>choiceColor=v);
-$('startBtn').onclick=start;$('newBtn').onclick=()=>{if(!busy){setPaused(true);$('menu').hidden=false}};$('closeMenu').onclick=()=>{$('menu').hidden=true;resume()};$('flipBtn').onclick=()=>{if(!busy){flipped=!flipped;render()}};$('undoBtn').onclick=()=>{if(busy||!history.length)return;worker?.terminate();job++;let count=mode==='ai'&&history.length>=2?2:1;while(count--&&history.length){let h=history.pop();game=h.state;taken=h.taken;ended=h.ended;notation.pop()}selected=-1;ended=null;if(rotating&&mode==='local')flipped=game.turn==='b';render();think()};$('resignBtn').onclick=()=>{if(ended||busy)return;ended='Resignation · '+(game.turn==='w'?'Black':'White')+' wins';render();showResult()};$('playAgain').onclick=()=>{$('resultDialog').hidden=true;$('menu').hidden=false};$('reviewBtn').onclick=()=>{$('resultDialog').hidden=true};function setMute(value){mute=value;$('soundBtn').textContent=mute?'♪ Sound off':'♪ Sound on';$('soundSetting').checked=!mute} $('soundBtn').onclick=()=>setMute(!mute);$('soundSetting').onchange=e=>setMute(!e.target.checked);$('settingsBtn').onclick=()=>{setPaused(true);$('settings').hidden=false;$('rotateSetting').checked=rotating};function closeSettings(){$('settings').hidden=true;$('animationPreview').src='about:blank';$('animationPreview').hidden=true;speed=$('animationSpeed').value;rotating=$('rotateSetting').checked;$('rotate').checked=rotating;resume()}$('closeSettings').onclick=closeSettings;$('doneSettings').onclick=closeSettings;function setPaused(value){paused=value;if(battlefield)battlefield.paused=value;}
+$('startBtn').onclick=start;$('newBtn').onclick=()=>{if(!busy){setPaused(true);$('menu').hidden=false}};$('closeMenu').onclick=()=>{$('menu').hidden=true;resume()};$('flipBtn').onclick=()=>{if(!busy){flipped=!flipped;render()}};$('undoBtn').onclick=()=>{if(busy||!history.length)return;worker?.terminate();job++;let count=mode==='ai'&&history.length>=2?2:1;while(count--&&history.length){let h=history.pop();game=h.state;taken=h.taken;ended=h.ended;notation.pop()}selected=-1;ended=null;if(rotating&&mode==='local')flipped=game.turn==='b';render();think()};$('resignBtn').onclick=()=>{if(ended||busy)return;ended='Resignation · '+(game.turn==='w'?'Black':'White')+' wins';render();showResult()};$('playAgain').onclick=()=>{$('resultDialog').hidden=true;$('menu').hidden=false};$('reviewBtn').onclick=()=>{$('resultDialog').hidden=true};function setMute(value){mute=value;$('soundBtn').textContent=mute?'♪ Sound off':'♪ Sound on';$('soundSetting').checked=!mute} $('soundBtn').onclick=()=>setMute(!mute);$('soundSetting').onchange=e=>setMute(!e.target.checked);$('settingsBtn').onclick=()=>{setPaused(true);$('settings').hidden=false;$('rotateSetting').checked=rotating};function closeSettings(){document.body.classList.remove('comparing-setting');applyAppearance(appearancePrefs.selected);$('appearancePreview').hidden=true;$('settings').hidden=true;$('animationPreview').src='about:blank';$('animationPreview').hidden=true;speed=$('animationSpeed').value;rotating=$('rotateSetting').checked;$('rotate').checked=rotating;resume()}$('closeSettings').onclick=closeSettings;$('doneSettings').onclick=closeSettings;function setPaused(value){paused=value;if(battlefield)battlefield.paused=value;}
 function resume(){setPaused(false);$('pauseDialog').hidden=true;if(pendingAi){let m=pendingAi;pendingAi=null;execute(m)}}
 function pause(){setPaused(true);$('pauseNew').disabled=busy;$('pauseDialog').hidden=false;}
 function openOverheadView(){document.body.classList.add('playing');$('menu').hidden=true;battlefield?.setView(0,1.49);resume()}
@@ -80,6 +104,6 @@ $('logBtn').onclick=()=>{let open=document.body.classList.toggle('show-log');$('
 $('fullscreenBtn').hidden=!document.fullscreenEnabled;
 $('fullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch(error){console.warn('Fullscreen unavailable',error)}};
 document.addEventListener('fullscreenchange',()=>{$('fullscreenBtn').setAttribute('aria-label',document.fullscreenElement?'Exit fullscreen':'Enter fullscreen')});
-document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!$('settings').hidden){closeSettings();return}if(!$('pauseDialog').hidden){resume();return}if(!$('menu').hidden){$('menu').hidden=true;resume();return}if(document.body.classList.contains('playing')){pause();return}selected=-1;if(!busy)render()});render();
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!$('appearancePreview').hidden){endAppearancePreview();return;}if(!$('settings').hidden){closeSettings();return}if(!$('pauseDialog').hidden){resume();return}if(!$('menu').hidden){$('menu').hidden=true;resume();return}if(document.body.classList.contains('playing')){pause();return}selected=-1;if(!busy)render()});render();
 
 export { battlefield };
