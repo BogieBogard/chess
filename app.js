@@ -1,5 +1,5 @@
 
-import { Battlefield } from './battlefield.js?v=20261022-staged-1';
+import { Battlefield } from './battlefield.js?v=20261022-overhead-fix-1';
 import Chess from './rules.js';
 import { animationOptions, loadPreferences, savePreferences } from './animation-options.js?v=20261022-staged-1';
 // UI and chess turn flow are independent of the 3D renderer.
@@ -10,7 +10,6 @@ const board=$('board');
 let battlefield;
 try{battlefield=new Battlefield(board,i=>tap(i))}catch(error){board.innerHTML='<p class="scene-error">3D rendering is unavailable. Enable WebGL or try a current browser. Keyboard board controls remain available below.</p>';console.error(error);$('boardAccess').classList.remove('board-access')}
 $('viewBattle').onclick=()=>battlefield?.setView(.3,.83);
-$('viewPark').onclick=()=>battlefield?.parkView();
 $('viewTop').onclick=()=>battlefield?.setView(0,1.49);
 $('fitBoard').onclick=()=>battlefield?.fitBoard();
 for(let [id,ratio] of [['zoomIn',.85],['zoomOut',1/.85]])$(id).onclick=()=>battlefield?.zoom(ratio);
@@ -42,7 +41,7 @@ function setInterface(style){if(!['classic','minimal','gallery'].includes(style)
 let savedInterface;try{savedInterface=animationStorage?.getItem('iron-ivory-interface-v1')}catch{}
 setInterface(savedInterface);
 $('interfaceStyle').onchange=()=>setInterface($('interfaceStyle').value);
-function setEnvironment(style){if(!['studio','park','sunset'].includes(style))style='park';battlefield?.setEnvironment(style);$('environmentStyle').value=style;$('viewPark').hidden=style==='studio';try{animationStorage?.setItem('iron-ivory-environment-v1',style)}catch{}}
+function setEnvironment(style){if(!['studio','park','sunset'].includes(style))style='park';battlefield?.setEnvironment(style);$('environmentStyle').value=style;try{animationStorage?.setItem('iron-ivory-environment-v1',style)}catch{}}
 let savedEnvironment,savedGraphics;try{savedEnvironment=animationStorage?.getItem('iron-ivory-environment-v1');savedGraphics=animationStorage?.getItem('iron-ivory-light-graphics-v1')}catch{}
 setEnvironment(savedEnvironment);$('environmentStyle').onchange=()=>setEnvironment($('environmentStyle').value);
 $('lightGraphics').checked=savedGraphics==='true';battlefield?.setGraphics($('lightGraphics').checked?'light':'full');
@@ -70,8 +69,8 @@ function segmented(id,callback){$(id).querySelectorAll('button').forEach(b=>b.on
 $('startBtn').onclick=start;$('newBtn').onclick=()=>{if(!busy){setPaused(true);$('menu').hidden=false}};$('closeMenu').onclick=()=>{$('menu').hidden=true;resume()};$('flipBtn').onclick=()=>{if(!busy){flipped=!flipped;render()}};$('undoBtn').onclick=()=>{if(busy||!history.length)return;worker?.terminate();job++;let count=mode==='ai'&&history.length>=2?2:1;while(count--&&history.length){let h=history.pop();game=h.state;taken=h.taken;ended=h.ended;notation.pop()}selected=-1;ended=null;if(rotating&&mode==='local')flipped=game.turn==='b';render();think()};$('resignBtn').onclick=()=>{if(ended||busy)return;ended='Resignation · '+(game.turn==='w'?'Black':'White')+' wins';render();showResult()};$('playAgain').onclick=()=>{$('resultDialog').hidden=true;$('menu').hidden=false};$('reviewBtn').onclick=()=>{$('resultDialog').hidden=true};function setMute(value){mute=value;$('soundBtn').textContent=mute?'♪ Sound off':'♪ Sound on';$('soundSetting').checked=!mute} $('soundBtn').onclick=()=>setMute(!mute);$('soundSetting').onchange=e=>setMute(!e.target.checked);$('settingsBtn').onclick=()=>{setPaused(true);$('settings').hidden=false;$('rotateSetting').checked=rotating};function closeSettings(){$('settings').hidden=true;$('animationPreview').src='about:blank';$('animationPreview').hidden=true;speed=$('animationSpeed').value;rotating=$('rotateSetting').checked;$('rotate').checked=rotating;resume()}$('closeSettings').onclick=closeSettings;$('doneSettings').onclick=closeSettings;function setPaused(value){paused=value;if(battlefield)battlefield.paused=value;}
 function resume(){setPaused(false);$('pauseDialog').hidden=true;if(pendingAi){let m=pendingAi;pendingAi=null;execute(m)}}
 function pause(){setPaused(true);$('pauseNew').disabled=busy;$('pauseDialog').hidden=false;}
-function openParkView(){if(battlefield?.environmentStyle==='studio')setEnvironment('park');document.body.classList.add('playing');$('menu').hidden=true;battlefield?.parkView();resume()}
-$('pausePark').onclick=openParkView;$('launchPark').onclick=openParkView;$('pausePark').disabled=$('launchPark').disabled=!battlefield;
+function openOverheadView(){document.body.classList.add('playing');$('menu').hidden=true;battlefield?.setView(0,1.49);resume()}
+$('pauseOverhead').onclick=openOverheadView;$('launchOverhead').onclick=openOverheadView;$('pauseOverhead').disabled=$('launchOverhead').disabled=!battlefield;
 $('pauseBtn').onclick=pause;$('resumeBtn').onclick=resume;
 $('pauseSettings').onclick=()=>{$('pauseDialog').hidden=true;$('settings').hidden=false;$('rotateSetting').checked=rotating};
 $('pauseNew').onclick=()=>{if(!busy){$('pauseDialog').hidden=true;$('menu').hidden=false}};

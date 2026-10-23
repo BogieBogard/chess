@@ -1,6 +1,7 @@
 # Daily improvements
 
 ## 2026-10-22
+- Corrected the Park view misunderstanding: removed every Park view menu/toolbar action. Restored Overhead below 380px and added direct Overhead actions to the welcome and in-game menus. The overhead piece-icon overlay remains available.
 - Added a discoverable Asset candidates section near the top of Settings, with six direct Sketchfab links and creator names. Added candidates.html as a mobile-friendly shortlist; links open a new tab to preserve the game.
 - Researched Sketchfab models for armored characters, conventional chess sets and park seating; recorded source links, listed licenses, triangle counts and evaluation notes in MODEL_RESEARCH.md. No third-party models imported.
 - Added three independent capture scripts: Crown breaker, Sweep & finish, and Rift unweave. Regional geometry is split from the actual model before movement, with capped cuts and retained materials.

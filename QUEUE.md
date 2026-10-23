@@ -15,15 +15,17 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 009 | Original Duel hits are choppy near contact; make them flow smoothly. | Shipped 2026-10-21: fractures prepared before movement, eased contact, no impact freeze. |
 | 010 | Keep incoming ideas organized, consecutive, and in context; knock them out in order. | Active workflow: this numbered queue is canonical. |
 | 011 | Legal-move highlights miss valid moves, including a pawn’s initial double advance. | Shipped 2026-10-21: clear unlit destination markers and labels; both initial advances verified for every pawn on both sides. |
-| 012 | Park view is missing from the menu. | Shipped 2026-10-21: direct Park view actions in both the welcome/new-game menu and in-game Menu; selecting it enables the park if Studio was selected. |
+| 012 | “NO PARK VIEW IN THE MENU” — Matt meant remove Park view. | Originally misinterpreted as a request to add it. Corrected by item 017: remove all Park view controls. |
 | 013 | In Overhead view, overlay piece icons so every occupied position is easy to understand. | Shipped 2026-10-21: contrasting white/black chess-symbol badges track pieces, appear in overhead views and hide in other camera views. |
 | 014 | Search Sketchfab for great chess-piece and environment models. | Researched 2026-10-22: MODEL_RESEARCH.md records six candidates, listing metadata and integration evaluation; no external assets imported. |
 | 015 | Stop variations of Original Duel. Build entirely different, bold sequences: partial head/body/leg hits, falls onto the side and finishing blows. | Shipped 2026-10-22: Crown breaker, Sweep & finish and Rift unweave use independent scene scripts and a regional-damage model. Tested across all attacker/defender combinations; saved choices retained. |
 | 016 | Make asset candidates easy to view from a phone and the live page, with direct links in Settings. | Shipped 2026-10-22: six direct Sketchfab links near the top of Settings plus a mobile-friendly candidates page. |
+| 017 | Remove Park view; restore the missing Overhead view, including on small phones. | Shipped 2026-10-22: removed Park view from every menu and toolbar; Overhead is always available in the toolbar, welcome menu and in-game Menu. |
 
 ## Working rules
 
 - Ideas add to this queue; they do not interrupt or erase the current item unless Matt explicitly changes the priority.
+- Do not add a Park view control. Matt explicitly rejected it. Keep Overhead visible at every screen width, including small phones.
 - Ship small tested changes, keep the daily log, and update queue status after verifying the live deployment.
 - Preserve approved styles and saved choices. Never re-enable discarded variants automatically.
 - Keep camera motion comfortable; never add capture screen shake.

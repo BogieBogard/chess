@@ -50,7 +50,6 @@ export class Battlefield {
   Object.assign(this.sun.shadow.camera,outdoor?{left:-38,right:38,top:38,bottom:-38,far:180}:{left:-6,right:6,top:6,bottom:-6,far:30});this.sun.shadow.camera.updateProjectionMatrix();this.cameraUpdate();
   this.renderer.shadowMap.needsUpdate=true;
  }
- parkView(){this.gestures.stop();this.angle=.25;this.elevation=.22;this.target.set(0,8,0);this.distance=70;this.cameraUpdate()}
  setGraphics(quality){this.renderer.shadowMap.enabled=quality!=='light';this.renderer.setPixelRatio(Math.min(devicePixelRatio,quality==='light'?1:1.8));this.renderer.shadowMap.needsUpdate=true;}
  updatePieceIcons(){
   const overhead=this.elevation>=1.35;this.iconLayer.hidden=!overhead;if(!overhead)return;
