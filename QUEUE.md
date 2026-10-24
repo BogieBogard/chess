@@ -34,6 +34,8 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 029 | Add a fast main-screen model-set switch, potentially top-left: current stylized animated figurines versus conventional chess pieces, preferably the Realistic set (Low Poly is also liked). Conventional pieces should use simple captures rather than sword combat. | Queued 2026-10-24; depends on actual model files and evaluation in 028. Preserve both styles and make switching quick. |
 | 030 | Remove “Drag to orbit · Pinch to zoom · Tap to move” from the main game screen; confirm Minimal bottom dock default. | Implemented in 400fb24 and 962db09; pending live release. |
 
+| 031 | Make Park · golden hour the default environment. | Queued 2026-10-24. Matt clarified Golden Hour is the worthwhile setting; make it standard without adding a quick toggle. |
+
 ## Working rules
 
 - Ideas add to this queue; they do not interrupt or erase the current item unless Matt explicitly changes the priority.
