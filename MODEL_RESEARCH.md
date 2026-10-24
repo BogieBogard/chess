@@ -1,6 +1,6 @@
 # Sketchfab model shortlist — October 22, 2026
 
-Requested by Matt, queue item 014. This is a researched shortlist, not an asset import. Counts, rigging and license labels below are from the creators' indexed Sketchfab listings. Several direct page fetches returned HTTP 403; downloaded archives, joints, texture budgets and separation of mesh parts have not been inspected. No third-party model is included in the game by this release.
+Requested by Matt, queue item 014. The original listing-based shortlist is preserved below. Current status: Realistic and the Plated pawn trial are installed; Greek Mythology is playable through its official embed. Dated sections record source-file checks and later public-viewer evaluation. Listing claims alone do not establish an exported rig.
 
 | Candidate | Creator | Listing information | Fit / next evaluation |
 |---|---|---|---|
@@ -15,11 +15,11 @@ Before integration, inspect the downloaded license and include the creator, sour
 
 ## Review — October 24, 2026
 
-Matt likes Plated Knight, both conventional chess sets and both benches. He suggested using Plated Knight as the king and asked to continue evaluating usable assets. Medieval Knight is explicitly rejected and removed from the live active shortlist. No files have been imported; file, license, rig and mobile-performance inspection is still required.
+Matt likes Plated Knight, both conventional chess sets and both benches. He suggested using Plated Knight as the king and asked to continue evaluating usable assets. Medieval Knight is explicitly rejected and removed from the live active shortlist. At this initial review no files had been imported; subsequent supplied-file checks and integrations are recorded below.
 
 ## Download access — October 24, 2026
 
-Direct browser inspection confirms Classic Park Bench lists CC BY 4.0, 4.8k triangles and 2.7k vertices. Its Download 3D Model action opens Sketchfab sign-in. Matt has an account but explicitly deferred Sketchfab work until back at his computer. No matching downloaded archives were found by filename in Downloads. Do not scrape viewer data as a substitute for source downloads. Next: signed-in source/GLB download, archive/license inspection, texture/draw-call budgets, scale normalization, then phone profiling. Benches, alternate king, and the model-set switch remain deferred rather than claimed shipped.
+Direct browser inspection confirms Classic Park Bench lists CC BY 4.0, 4.8k triangles and 2.7k vertices. Its Download 3D Model action opens Sketchfab sign-in. Matt has an account but explicitly deferred Sketchfab work until back at his computer. No matching downloaded archives were found by filename in Downloads. Do not scrape viewer data as a substitute for source downloads. Next: signed-in source/GLB download, archive/license inspection, texture/draw-call budgets, scale normalization, then phone profiling. This was the initial deferral; Matt subsequently supplied Realistic and Plated GLBs, and the set switch shipped. Bench imports remain deferred.
 
 ## Supplied GLBs inspected — October 24, 2026
 
@@ -27,7 +27,7 @@ Matt supplied Realistic Chess Set (18,422,664 bytes) and Plated Knight (25,146,7
 
 Realistic Chess Set has 33 separate meshes (32 pieces plus board), 3 materials, one board image, no skins and no animation clips. Six canonical white piece geometries were extracted, world transforms baked and bases centered. Shared templates and 16-bit positions/8-bit normals reduce the game asset to 1,775,160 bytes plus metadata; the board texture is omitted. Black and white source material colors are retained. The full army still contains approximately 762.7k piece triangles; only six geometry buffers and two materials are shared across 32 single-mesh pieces. Tests cover square fit, bounds, resource sharing, castling, en passant and capture routing. The imported style uses simple captures while the figurine animation preference stays intact.
 
-Plated Knight’s supplied GLB has 18 meshes: 8 armor/character meshes plus platform and decorative flowers. It contains 32 images, no skins, no joint weights and no animation clips. This contradicts treating this particular download as ready-rigged. A pawn experiment needs deliberate rigid-part articulation or a different rigged source; a mesh swap cannot reuse the existing kneeling/walking/sword rig automatically. No Plated mesh imported into production yet.
+Plated Knight’s supplied GLB has 18 meshes: 8 armor/character meshes plus platform and decorative flowers. It contains 32 images, no skins, no joint weights and no animation clips. This contradicts treating this particular download as ready-rigged. A pawn experiment needs deliberate rigid-part articulation or a different rigged source; a mesh swap cannot reuse the existing kneeling/walking/sword rig automatically. The later pawn trial below imports these static meshes; it does not invent a missing skeleton.
 
 Greek Mythology Pieces by ahingel: embed supplied by Matt. Official Viewer API documents node maps, local transform control and click events, so no full-page reload is inherently necessary. This model still needs a node-separation and usage check before it can be called playable. Embedding is not source-model redistribution and does not merge its board into the current park scene.
 
@@ -54,3 +54,17 @@ Matt wants higher-quality replacements with usable skeletons. The rejected Medie
 - **[The Forgotten Knight](https://sketchfab.com/3d-models/the-forgotten-knight-d14eb14d83bd4e7ba7cbe443d76a10fd) — dark_igorek**: 223.7k triangles · Rig listed; needs a lighter game mesh. Creator listing offers download under CC Attribution. Detailed armor and strong art direction, but too heavy to repeat unchanged across a full army; requires mesh/texture optimization and a mobile budget.
 
 Next file checks: exported GLB must contain skins/joints/weights (not merely a listing tag), separate or usable weapon attachment, animation clips and sensible bind pose; test walking, sword contact and capture choreography, joint counts, skinning/draw-call costs, texture memory and one-army phone performance. No account actions, purchases or artist messages were made. The Plated Knight listing says the author rigged it but did not upload animations; Matt’s supplied GLB demonstrably contains no skins or clips, so a different original-format export could be investigated later. An auto-rigged alternative was excluded from this shortlist because its own listing reports sword/cape weights attached to the legs.
+
+## Public-viewer animation checks — October 24, 2026 (daily follow-up)
+
+Continued queue items 028 and 038 using the official Viewer API, without extracting geometry or bypassing source-download sign-in. Pale Knight's Download action opens sign-in; no new candidate source files are available in Downloads. Bench deferral remains unchanged.
+
+| Candidate | Public viewer result | Interpretation |
+|---|---|---|
+| The Knight of Tomorrow | One `Action.001` clip, 9.8 seconds; 12 exposed scene nodes. Play/Pause/Replay work; paused playback time was read back from the API. | Useful expressive motion to review. Exported skeleton, weights, weapon attachments and retargeting still unverified. |
+| Pale Knight Animated | One `__Knight\|Action` clip, about 6.8 seconds; 20 exposed scene nodes. Viewer loads and clip playback works. | Confirms an actual preview clip, not a combat animation library. Source rig/weights still unverified. |
+| The Forgotten Knight | Zero animation clips; 43 exposed scene nodes. Model renders as a static preview. | Do not describe this viewer as animated. The creator's rig claim still needs source-file inspection; its larger geometry budget remains a concern. |
+
+The new review section in candidates.html lets Matt load one character at a time, inspect source clips, play/pause/replay, and save browser-local Keep/Discard decisions. It starts previews paused, closes the previous viewer when switching, and never loads a discarded candidate from a saved/direct-link fallback. It does not change the selected game set or install models. Runtime metadata describes only what the public viewer exposes; scene-node counts do not establish skin/joint bindings.
+
+Reference: [Sketchfab Viewer API animation controls](https://sketchfab.com/developers/viewer/functions). Next adoption step still requires source GLB/original archives with license, actual skin/weights/clips, weapon separation, and measured game-side mobile cost. No rejected model has been restored.

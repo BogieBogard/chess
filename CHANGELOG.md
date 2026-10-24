@@ -1,6 +1,9 @@
 # Daily improvements
 
 ## 2026-10-24
+- Added an embedded character-review workbench linked from Settings → Asset candidates. Load one candidate, select its source animation, Play/Pause/Replay, and save Keep/Discard decisions locally. Previews start paused; discarded candidates do not return automatically, even through direct links. Game-set preferences remain separate.
+- Continued model evaluation with the official public viewer: Knight of Tomorrow exposes a 9.8s clip, Pale Knight a 6.8s clip, and Forgotten Knight no animation clips. Source downloads still require sign-in; no rigged replacement adopted or protected model data extracted.
+- Validation: 43 tests pass, including review persistence, all-discarded/direct-link behavior, rejected-asset exclusion and unavailable storage. Browser verified all three viewer outcomes, playback/pause time read-back, replay, saved Keep and discard protection across reload. A 358px CSS viewport has no horizontal overflow and full-width picker/load controls.
 - Final release 39f1c02 verified live: saved Greek loading, actual pawn move/computer reply, exactly three dock controls, no pause filler, eight candidate links, and no new console errors. Fresh preferences start in Realistic. Forty tests pass; phone checks covered 320px dock layout and 390px Greek icon alignment.
 - Simplified the dock to Icons, Overhead and the set selector on one horizontal row. Removed zoom/Battle view buttons, moved Pass & Play Flip into the menu, and removed the three pause-menu filler lines. Realistic is the default for new preferences; explicit saved styles remain available.
 - Added three rigged-character research candidates with direct phone-friendly links in Settings: The Knight of Tomorrow, Pale Knight Animated, and The Forgotten Knight. Listings describe rigs; actual files and mobile performance are still unverified. No character was adopted based only on listing tags.
