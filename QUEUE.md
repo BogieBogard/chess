@@ -43,15 +43,15 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 
 | 036 | Remove both rotate buttons beside Overhead; they are unnecessary. | Shipped 2026-10-24, cb2bf38; verified live. Preserve drag/orbit gestures and the other camera controls. |
 
-| 037 | Follow-up to Matt’s embed request (035): connect the Greek Mythology set to the playable model selector if object control is supported, preserving the current game without unnecessary reloads. | Implemented 2026-10-24. 40 tests pass; browser verified AI play, switching, capture/undo and aligned phone icons. Deploying the optional beta; extra promoted roles use an approved pawn/badge representation. Original embedded scene and attribution retained. |
+| 037 | Follow-up to Matt’s embed request (035): connect the Greek Mythology set to the playable model selector if object control is supported, preserving the current game without unnecessary reloads. | Shipped 2026-10-24, a747e3c. 40 tests pass; browser verified AI play, switching, capture/undo, saved reload and aligned phone icons. Live Greek selection and pawn movement verified. Extra promoted roles use an approved pawn/badge representation; original scene and attribution retained. |
 
-| 038 | Search Sketchfab for higher-quality character replacements for the current figurines, prioritizing a usable skeleton/rig so they can support articulated combat. Current figurines are not high quality enough. | Queued 2026-10-24; rejected Medieval Knight remains excluded. Inspect actual rig/animation and phone budgets before adopting. |
-| 039 | Make the imported Realistic set the default because the current figurines do not yet deliver a quality experience. | Queued 2026-10-24 after the active Greek integration; retain the comparison styles. |
+| 038 | Search Sketchfab for higher-quality character replacements for the current figurines, prioritizing a usable skeleton/rig so they can support articulated combat. Current figurines are not high quality enough. | Researched 2026-10-24: three new creator-listed rigged candidates, source links and tradeoffs added to Settings and research. Actual rig files and mobile budgets remain unverified; no new character adopted. Rejected Medieval Knight remains excluded. |
+| 039 | Make the imported Realistic set the default because the current figurines do not yet deliver a quality experience. | Implemented 2026-10-24: Realistic fallback for new preferences; explicit saved styles and all comparisons retained. Validating. |
 
-| 040 | Remove the plus and minus zoom buttons. | Queued 2026-10-24. Preserve pinch and scroll zoom. |
+| 040 | Remove the plus and minus zoom buttons. | Implemented 2026-10-24; validating. Preserve pinch and scroll zoom. |
 
-| 041 | Put the board-set dropdown in the shared horizontal dock alongside Icons and Overhead; these should be its only components. Keep the layout clean and easy to understand. | Queued 2026-10-24. Remove floating top selector and Battle view from the dock; preserve orbit gestures. |
-| 042 | Remove useless pause-menu copy: Take a breath, Battle paused, and Return when ready / Your army will wait. | Queued 2026-10-24; keep menu actions. |
+| 041 | Put the board-set dropdown in the shared horizontal dock alongside Icons and Overhead; these should be its only components. Keep the layout clean and easy to understand. | Implemented 2026-10-24; validating. Floating selector and Battle view removed from dock; Flip moved into Pass & Play menu. Orbit gestures preserved. |
+| 042 | Remove useless pause-menu copy: Take a breath, Battle paused, and Return when ready / Your army will wait. | Implemented 2026-10-24; validating. Menu actions retained. |
 
 ## Working rules
 
