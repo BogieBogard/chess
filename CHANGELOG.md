@@ -1,6 +1,7 @@
 # Daily improvements
 
 ## 2026-10-24
+- Shipped 0c5faee and verified the live character-review page, real source playback and pause-time read-back, no console errors, and the visible Settings → Asset candidates → Preview animations link. Queue/model notes distinguish public-viewer evidence from the source-file/rig checks still pending.
 - Added an embedded character-review workbench linked from Settings → Asset candidates. Load one candidate, select its source animation, Play/Pause/Replay, and save Keep/Discard decisions locally. Previews start paused; discarded candidates do not return automatically, even through direct links. Game-set preferences remain separate.
 - Continued model evaluation with the official public viewer: Knight of Tomorrow exposes a 9.8s clip, Pale Knight a 6.8s clip, and Forgotten Knight no animation clips. Source downloads still require sign-in; no rigged replacement adopted or protected model data extracted.
 - Validation: 43 tests pass, including review persistence, all-discarded/direct-link behavior, rejected-asset exclusion and unavailable storage. Browser verified all three viewer outcomes, playback/pause time read-back, replay, saved Keep and discard protection across reload. A 358px CSS viewport has no horizontal overflow and full-width picker/load controls.
