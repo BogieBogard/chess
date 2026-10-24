@@ -1,6 +1,7 @@
 # Daily improvements
 
 ## 2026-10-24
+- Shipped f44c661; verified immediate startup and Settings alternatives on the live page.
 - Removed the welcome gate and its introductory/tagline copy. The page opens immediately into computer chess on Medium with the user as White.
 - Moved opponent, difficulty and side selection into Settings under New game. Changes apply only when starting a new game, preserving the current game when Settings is closed.
 - Validation: all 23 tests pass; browser verified immediate startup, Medium/White defaults, cancelled setup, Pass & Play and the 320px Settings layout.
