@@ -1,6 +1,7 @@
 # Daily improvements
 
 ## 2026-10-24
+- Follow-up batch validation: 27 tests pass. Browser verified 320px toolbar, all-view icons and saved toggle state, Minimal defaults with retained saved Classic, and unbranded loading/main screens.
 - Recorded Matt’s asset reviews: Medieval Knight rejected and removed from the active shortlist; Plated Knight, both chess sets and both benches marked liked. Existing Settings placement retained at Matt’s request.
 - Removed the app name from the loading screen, HUD, dashboard branding and page title. The turn status remains visible.
 - Minimal bottom dock is now the default interface for new preferences; existing saved interface choices are retained.

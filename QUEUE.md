@@ -1,7 +1,6 @@
 # Chess improvement queue
 
 Matt sends ideas here; preserve their order and context. Number new ideas consecutively. Work on the earliest unfinished item, retain its original request, and record shipped commits in CHANGELOG.md. Do not replace this queue with a new list when fresh ideas arrive.
-
 | # | Request, in order received | Status |
 |---|---|---|
 | 001 | Remove screen shake when pieces are destroyed. | Shipped a7fe589. Never restore it. |
@@ -23,23 +22,17 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 017 | Remove Park view; restore the missing Overhead view, including on small phones. | Shipped 2026-10-22: removed Park view from every menu and toolbar; Overhead is always available in the toolbar, welcome menu and in-game Menu. |
 | 018 | Follow-up to 004: compare graphics/environment settings with the same saved Keep/Discard approach as animations. | Shipped 2026-10-23, 792fa7e: full-board candidate/saved comparison, explicit Use action, cancel restoration and saved ratings. Verified live. |
 | 019 | Remove welcome-page copy (Welcome to the battlefield, Claim your crown, strategy/soul text, Your allegiance, and No clocks/No rush/next move). Start immediately vs computer, Medium, as White; put alternatives such as Pass & Play in Settings. | Shipped 2026-10-24, f44c661: immediate Medium/White computer game; setup in Settings; welcome copy and bottom tagline removed. Verified live. |
-
 | 020 | Replace the initial flash of the old dashboard (“The battlefield comes alive”) with a modern, elegant loading process. | Shipped 2026-10-24, 7e7890b: minimal loading shell, first populated frame reveal, reduced-motion support and retry. Verified live. |
 | 021 | After loading work: default to Overhead; move both Overhead and Battle view one “+” step closer because the game is too zoomed out by default. | Shipped 2026-10-24, c04e5a2: Overhead default, both presets one zoom step closer; verified live. |
-
 | 022 | Make piece icons a central, default-on feature in every camera view, with a one-tap main-screen toggle. Overlapping icons behind the nearest should grow darker/grayer through up to three depth layers. Replace the Fit board button with this toggle (Matt’s follow-up). | Implemented and locally verified 2026-10-24; pending live release. |
-
 | 023 | Make Minimal bottom dock the default interface design. | Implemented 2026-10-24: Minimal for new preferences; preserve explicitly saved choices. Pending live release. |
-
 | 024 | Remove the “Iron & Ivory” name from the loading screen and actual main screen; the label adds no value. | Implemented 2026-10-24; pending live release. |
-
 | 025 | Matt cannot find the researched Sketchfab candidates in the UI. Make the existing six-model shortlist easier to discover from the main menu. | Cancelled by Matt 2026-10-24: found the links and says their current location is fine. Retain existing placement. |
-
 | 026 | Asset review: reject Medieval Knight (Andy Woodhead); Plated Knight looks cool and is the promising candidate. | Implemented 2026-10-24: rejected model removed from active shortlist, rejection preserved in research; Plated Knight, Low Poly Chess Set, Realistic Chess Set and both park benches marked liked for file/rig/performance evaluation before adoption. Pending live release. |
-
 | 027 | Add liked park bench candidates to the park scene after checking their files, licenses and performance; Matt likes both benches. | Queued 2026-10-24. Do not import listing previews or assume downloadable files are verified. |
-
 | 028 | Continue researching and using suitable shortlisted assets except rejected Medieval Knight. Consider using Plated Knight as the king; retain different chess-set styles where practical. | Queued 2026-10-24: investigate actual files, licensing, rigs and performance before adoption. |
+| 029 | Add a fast main-screen model-set switch, potentially top-left: current stylized animated figurines versus conventional chess pieces, preferably the Realistic set (Low Poly is also liked). Conventional pieces should use simple captures rather than sword combat. | Queued 2026-10-24; depends on actual model files and evaluation in 028. Preserve both styles and make switching quick. |
+| 030 | Remove “Drag to orbit · Pinch to zoom · Tap to move” from the main game screen; confirm Minimal bottom dock default. | Implemented in 400fb24 and 962db09; pending live release. |
 
 ## Working rules
 
