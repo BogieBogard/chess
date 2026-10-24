@@ -61,3 +61,11 @@ test('every starting pawn shows both one-square and two-square destinations for 
   assert.equal(b.moveMarkers.children.filter(m=>m.userData.kind==='move').length,0);
  }
 });
+
+test('closer Overhead and Battle presets retain the full playing surface on phone and desktop',async()=>{
+ const {Battlefield}=await import('../battlefield.js');
+ for(const aspect of[320/740,740/320,16/9])for(const [angle,elevation]of[[0,1.49],[.3,.83]]){
+  const b=Object.create(Battlefield.prototype);Object.assign(b,{camera:new T.PerspectiveCamera(39,aspect,.1,220),target:new T.Vector3(),scene:{fog:{}},flip:false,gestures:{stop(){}}});b.setView(angle,elevation);b.camera.updateMatrixWorld();
+  for(const x of[-4.35,4.35])for(const z of[-4.35,4.35]){const p=new T.Vector3(x,0,z).project(b.camera);assert.ok(Math.abs(p.x)<1);assert.ok(Math.abs(p.y)<1)}
+ }
+});

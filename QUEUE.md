@@ -24,8 +24,14 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 018 | Follow-up to 004: compare graphics/environment settings with the same saved Keep/Discard approach as animations. | Shipped 2026-10-23, 792fa7e: full-board candidate/saved comparison, explicit Use action, cancel restoration and saved ratings. Verified live. |
 | 019 | Remove welcome-page copy (Welcome to the battlefield, Claim your crown, strategy/soul text, Your allegiance, and No clocks/No rush/next move). Start immediately vs computer, Medium, as White; put alternatives such as Pass & Play in Settings. | Shipped 2026-10-24, f44c661: immediate Medium/White computer game; setup in Settings; welcome copy and bottom tagline removed. Verified live. |
 
-| 020 | Replace the initial flash of the old dashboard (“The battlefield comes alive”) with a modern, elegant loading process. | In progress 2026-10-24: minimal loading shell; reveal after first populated 3D frame. |
-| 021 | After loading work: default to Overhead; move both Overhead and Battle view one “+” step closer because the game is too zoomed out by default. | Queued 2026-10-24. Matt confirmed both views. |
+| 020 | Replace the initial flash of the old dashboard (“The battlefield comes alive”) with a modern, elegant loading process. | Shipped 2026-10-24, 7e7890b: minimal loading shell, first populated frame reveal, reduced-motion support and retry. Verified live. |
+| 021 | After loading work: default to Overhead; move both Overhead and Battle view one “+” step closer because the game is too zoomed out by default. | In progress 2026-10-24. Matt confirmed both views. |
+
+| 022 | Make piece icons a central, default-on feature in every camera view, with a one-tap main-screen toggle. Overlapping icons behind the nearest should grow darker/grayer through up to three depth layers. Replace the Fit board button with this toggle (Matt’s follow-up). | Queued 2026-10-24, after camera item 021. |
+
+| 023 | Make Minimal bottom dock the default interface design. | Queued 2026-10-24; preserve explicitly saved interface choices. |
+
+| 024 | Remove the “Iron & Ivory” name from the loading screen and actual main screen; the label adds no value. | Queued 2026-10-24. |
 
 ## Working rules
 

@@ -1,6 +1,8 @@
 # Daily improvements
 
 ## 2026-10-24
+- Camera presets now start Overhead and frame both Overhead and Battle one zoom-in step closer. Projection checks confirm the full playing surface stays visible on phone and desktop.
+- Loading release 7e7890b verified live: no dashboard flash, loader dismissed after populated frame.
 - Loading validation: all 23 tests pass. Browser verified the pre-script shell, 320px layout, first-frame reveal and failed-import retry.
 - Added a minimal, immediately available loading shell with a small chessboard mark, wordmark and loading indicator. The dashboard stays hidden until the first populated 3D frame; no artificial delay. Reduced motion uses a static indicator. Startup failures show a retry action.
 - Shipped f44c661; verified immediate startup and Settings alternatives on the live page.
