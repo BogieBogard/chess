@@ -1,6 +1,6 @@
 import { appearanceOptions, loadAppearance, saveAppearance, rateAppearance } from './appearance-options.js';
 
-import { Battlefield } from './battlefield.js?v=20261022-overhead-fix-1';
+import { Battlefield } from './battlefield.js?v=20261024-loading-1';
 import Chess from './rules.js';
 import { animationOptions, loadPreferences, savePreferences } from './animation-options.js?v=20261022-staged-1';
 // UI and chess turn flow are independent of the 3D renderer.

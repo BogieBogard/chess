@@ -1,6 +1,8 @@
 # Daily improvements
 
 ## 2026-10-24
+- Loading validation: all 23 tests pass. Browser verified the pre-script shell, 320px layout, first-frame reveal and failed-import retry.
+- Added a minimal, immediately available loading shell with a small chessboard mark, wordmark and loading indicator. The dashboard stays hidden until the first populated 3D frame; no artificial delay. Reduced motion uses a static indicator. Startup failures show a retry action.
 - Shipped f44c661; verified immediate startup and Settings alternatives on the live page.
 - Removed the welcome gate and its introductory/tagline copy. The page opens immediately into computer chess on Medium with the user as White.
 - Moved opponent, difficulty and side selection into Settings under New game. Changes apply only when starting a new game, preserving the current game when Settings is closed.

@@ -12,6 +12,7 @@ export function captureStyle(code,victim,from,to,variant){const diagonal=from%8!
 function bevelBox(w,h,d,r=.035){const s=new T.Shape();s.moveTo(-w/2+r,-d/2);s.lineTo(w/2-r,-d/2);s.quadraticCurveTo(w/2,-d/2,w/2,-d/2+r);s.lineTo(w/2,d/2-r);s.quadraticCurveTo(w/2,d/2,w/2-r,d/2);s.lineTo(-w/2+r,d/2);s.quadraticCurveTo(-w/2,d/2,-w/2,d/2-r);s.lineTo(-w/2,-d/2+r);s.quadraticCurveTo(-w/2,-d/2,-w/2+r,-d/2);const g=new T.ExtrudeGeometry(s,{depth:h-r*2,bevelEnabled:true,bevelSegments:3,steps:1,bevelSize:r,bevelThickness:r,curveSegments:6});g.rotateX(-Math.PI/2);g.translate(0,-h/2+r,0);return g}
 export class Battlefield {
  constructor(host,onSquare){
+  this.ready=new Promise((resolve,reject)=>{this.resolveReady=resolve;this.rejectReady=reject});
   this.host=host;this.units=new Map();this.tiles=[];this.effects=[];this.count=0;this.flip=false;this.paused=false;this.angle=.3;this.elevation=.83;this.distance=17;this.target=new T.Vector3(0,.35,0);
   this.scene=new T.Scene();this.scene.background=new T.Color('#121b22');this.scene.fog=new T.Fog('#121b22',65,140);this.camera=new T.PerspectiveCamera(39,1,.1,220);
   this.renderer=new T.WebGLRenderer({antialias:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.shadowMap.autoUpdate=false;this.renderer.shadowMap.needsUpdate=true;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;host.append(this.renderer.domElement);this.iconLayer=document.createElement('div');this.iconLayer.className='piece-icon-layer';this.iconLayer.setAttribute('aria-hidden','true');this.iconLayer.hidden=true;host.append(this.iconLayer);this.unitIcons=new Map();
@@ -34,7 +35,7 @@ export class Battlefield {
    zoom:ratio=>this.zoom(ratio),pan:(dx,dy)=>this.pan(dx,dy)
   });
   this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();let last=performance.now();
-  this.renderer.setAnimationLoop(now=>{let dt=Math.min(.1,Math.max(0,(now-last)/1000));last=now;this.gestures.update(dt);if(!this.paused){if(this.effects.length)this.renderer.shadowMap.needsUpdate=true;for(let effect of [...this.effects])if(!effect.update(dt)){effect.dispose();this.effects.splice(this.effects.indexOf(effect),1)}}this.renderer.render(this.scene,this.camera);this.updatePieceIcons()});
+  this.renderer.setAnimationLoop(now=>{let dt=Math.min(.1,Math.max(0,(now-last)/1000));last=now;this.gestures.update(dt);if(!this.paused){if(this.effects.length)this.renderer.shadowMap.needsUpdate=true;for(let effect of [...this.effects])if(!effect.update(dt)){effect.dispose();this.effects.splice(this.effects.indexOf(effect),1)}}try{this.renderer.render(this.scene,this.camera);if(this.units.size&&this.resolveReady){this.resolveReady();this.resolveReady=null;this.rejectReady=null}}catch(error){if(this.rejectReady){this.rejectReady(error);this.resolveReady=null;this.rejectReady=null;this.renderer.setAnimationLoop(null)}else throw error}this.updatePieceIcons()});
  }
  setEnvironment(style){
   if(!['studio','park','sunset'].includes(style))style='studio';
