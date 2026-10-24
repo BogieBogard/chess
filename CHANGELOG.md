@@ -1,6 +1,7 @@
 # Daily improvements
 
 ## 2026-10-24
+- Removed the app name from the loading screen, HUD, dashboard branding and page title. The turn status remains visible.
 - Minimal bottom dock is now the default interface for new preferences; existing saved interface choices are retained.
 - Added a saved, default-on Icons toggle in place of Fit board. Icons remain available in every camera view. Screen-space overlap uses front-to-back ordering and three darker/desaturated rear layers; unobscured icons remain crisp. Removed the floating gesture helper that obscured the near rank.
 - Icon validation: depth-layer tests cover overlaps, ordering, hidden pieces and the three-layer cap. Browser checks verify saved toggle state across reload and the low-angle overlap appearance.
