@@ -1,0 +1,274 @@
+{
+  "version": 1,
+  "source": {
+    "author": "Ulrik Langvandsbråten (https://sketchfab.com/best3deu)",
+    "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+    "source": "https://sketchfab.com/3d-models/plated-knight-medieval-24fd61c662414344bcb81ddc62fd1e3b",
+    "title": "Plated Knight - Medieval"
+  },
+  "meshes": [
+    {
+      "vertices": 5127,
+      "positions": 0,
+      "normals": 61524,
+      "uv": 76908,
+      "indices": 117924,
+      "indexCount": 26202,
+      "material": 0
+    },
+    {
+      "vertices": 8635,
+      "positions": 222732,
+      "normals": 326352,
+      "uv": 352260,
+      "indices": 421340,
+      "indexCount": 41688,
+      "material": 1
+    },
+    {
+      "vertices": 3923,
+      "positions": 588092,
+      "normals": 635168,
+      "uv": 646940,
+      "indices": 678324,
+      "indexCount": 14175,
+      "material": 2
+    },
+    {
+      "vertices": 3695,
+      "positions": 735024,
+      "normals": 779364,
+      "uv": 790452,
+      "indices": 820012,
+      "indexCount": 19296,
+      "material": 3
+    },
+    {
+      "vertices": 12708,
+      "positions": 897196,
+      "normals": 1049692,
+      "uv": 1087816,
+      "indices": 1189480,
+      "indexCount": 64458,
+      "material": 4
+    },
+    {
+      "vertices": 2020,
+      "positions": 1447312,
+      "normals": 1471552,
+      "uv": 1477612,
+      "indices": 1493772,
+      "indexCount": 10194,
+      "material": 5
+    },
+    {
+      "vertices": 2082,
+      "positions": 1534548,
+      "normals": 1559532,
+      "uv": 1565780,
+      "indices": 1582436,
+      "indexCount": 11070,
+      "material": 6
+    },
+    {
+      "vertices": 6565,
+      "positions": 1626716,
+      "normals": 1705496,
+      "uv": 1725192,
+      "indices": 1777712,
+      "indexCount": 30600,
+      "material": 7
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "13_-_Default",
+      "normalTexture": {
+        "index": 2
+      },
+      "occlusionTexture": {
+        "index": 1
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "09_-_Default",
+      "normalTexture": {
+        "index": 5
+      },
+      "occlusionTexture": {
+        "index": 4
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3
+        },
+        "metallicRoughnessTexture": {
+          "index": 4
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "11_-_Default",
+      "normalTexture": {
+        "index": 8
+      },
+      "occlusionTexture": {
+        "index": 7
+      },
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.6419588415,
+          0.6419588415,
+          0.6419588415,
+          1
+        ],
+        "baseColorTexture": {
+          "index": 6
+        },
+        "metallicRoughnessTexture": {
+          "index": 7
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "12_-_Default",
+      "normalTexture": {
+        "index": 11
+      },
+      "occlusionTexture": {
+        "index": 10
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 9
+        },
+        "metallicRoughnessTexture": {
+          "index": 10
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "10_-_Default",
+      "normalTexture": {
+        "index": 14
+      },
+      "occlusionTexture": {
+        "index": 13
+      },
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.3919588415,
+          0.3919588415,
+          0.3919588415,
+          1
+        ],
+        "baseColorTexture": {
+          "index": 12
+        },
+        "metallicRoughnessTexture": {
+          "index": 13
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "06_-_Default",
+      "normalTexture": {
+        "index": 17
+      },
+      "occlusionTexture": {
+        "index": 16
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 15
+        },
+        "metallicRoughnessTexture": {
+          "index": 16
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "08_-_Default",
+      "normalTexture": {
+        "index": 20
+      },
+      "occlusionTexture": {
+        "index": 19,
+        "strength": 0.6419588415
+      },
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.4224466463,
+          0.4224466463,
+          0.4224466463,
+          1
+        ],
+        "baseColorTexture": {
+          "index": 18
+        },
+        "metallicRoughnessTexture": {
+          "index": 19
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "07_-_Default",
+      "normalTexture": {
+        "index": 23
+      },
+      "occlusionTexture": {
+        "index": 22
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 21
+        },
+        "metallicRoughnessTexture": {
+          "index": 22
+        }
+      }
+    }
+  ],
+  "textures": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ]
+}

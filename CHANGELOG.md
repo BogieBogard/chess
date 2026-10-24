@@ -1,6 +1,7 @@
 # Daily improvements
 
 ## 2026-10-24
+- Added the Plated Knight pawn trial as a third central set choice. Imported textured pawns sit alongside the existing combat figurines; original Figurines and Realistic remain available. Simple motion handles the unrigged pawns and their captures. Shared character meshes and 512px textures reduce the supplied 25.15MB download to 3.24MB, with creator/license credits.
 - Model-switch validation: 33 tests pass. Browser verified imported materials, phone layout, a real e2–e4 move, switching sets without losing that move, and saved Realistic selection after reload.
 - Added a central main-screen set selector: current figurines or the imported Realistic Chess Set by BenAissa_Karim (CC BY 4.0). Switching preserves the current game and saved combat choice; selection persists across reload.
 - Realistic pieces use simple movement/captures, including castling and en passant, rather than combat choreography. Lazy-loaded, shared and quantized piece templates reduce the source download from 18.42MB to 1.78MB plus metadata. Credits link includes source, creator, license and modifications.

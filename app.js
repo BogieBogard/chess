@@ -76,9 +76,9 @@ $('lightGraphics').onchange=()=>{battlefield?.setGraphics($('lightGraphics').che
 function updateModelControl(){$('pieceSetSwitch').disabled=busy||modelLoading;$('pieceSetSwitch').value=pendingModel?.id||modelSet}
 function applyPendingModel(){if(!pendingModel||busy)return;const next=pendingModel;pendingModel=null;battlefield?.setPieceSet(next.id,next.factory);modelSet=next.id;$('pieceSetStatus').textContent='';if(next.persist)try{animationStorage?.setItem('iron-ivory-piece-set-v1',modelSet)}catch{}}
 async function choosePieceSet(style,persist=true){
- if(!['figurines','realistic'].includes(style)||modelLoading)return;
- modelLoading=true;$('pieceSetStatus').textContent=style==='realistic'?'Loading pieces…':'';updateModelControl();
- try{const factory=style==='realistic'?(await import('./realistic-pieces.js')).loadRealisticPieces:null;const loaded=factory?await factory():null;pendingModel={id:style,factory:loaded?.piece,persist};$('pieceSetStatus').textContent=busy?'Switching after this move…':'';render()}
+ if(!['figurines','realistic','plated'].includes(style)||modelLoading)return;
+ modelLoading=true;$('pieceSetStatus').textContent=style!=='figurines'?'Loading pieces…':'';updateModelControl();
+ try{const factory=style==='realistic'?(await import('./realistic-pieces.js')).loadRealisticPieces:style==='plated'?(await import('./plated-pawns.js')).loadPlatedPawns:null;const loaded=factory?await factory():null;pendingModel={id:style,factory:loaded?.piece,persist};$('pieceSetStatus').textContent=busy?'Switching after this move…':'';render()}
  catch(error){$('pieceSetStatus').textContent='Couldn’t load pieces. Please try again.';console.warn('Piece set unavailable',error)}
  finally{modelLoading=false;updateModelControl()}
 }
@@ -119,6 +119,6 @@ $('fullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await doc
 document.addEventListener('fullscreenchange',()=>{$('fullscreenBtn').setAttribute('aria-label',document.fullscreenElement?'Exit fullscreen':'Enter fullscreen')});
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!$('appearancePreview').hidden){endAppearancePreview();return;}if(!$('settings').hidden){closeSettings();return}if(!$('pauseDialog').hidden){resume();return}if(document.body.classList.contains('playing')){pause();return}selected=-1;if(!busy)render()});start();
 let savedPieceSet;try{savedPieceSet=animationStorage?.getItem('iron-ivory-piece-set-v1')}catch{}
-const modelSetReady=choosePieceSet(savedPieceSet==='realistic'?'realistic':'figurines',false);
+const modelSetReady=choosePieceSet(['realistic','plated'].includes(savedPieceSet)?savedPieceSet:'figurines',false);
 
 export { battlefield, modelSetReady };

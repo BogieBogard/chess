@@ -30,3 +30,7 @@ Realistic Chess Set has 33 separate meshes (32 pieces plus board), 3 materials, 
 Plated Knight’s supplied GLB has 18 meshes: 8 armor/character meshes plus platform and decorative flowers. It contains 32 images, no skins, no joint weights and no animation clips. This contradicts treating this particular download as ready-rigged. A pawn experiment needs deliberate rigid-part articulation or a different rigged source; a mesh swap cannot reuse the existing kneeling/walking/sword rig automatically. No Plated mesh imported into production yet.
 
 Greek Mythology Pieces by ahingel: embed supplied by Matt. Official Viewer API documents node maps, local transform control and click events, so no full-page reload is inherently necessary. This model still needs a node-separation and usage check before it can be called playable. Embedding is not source-model redistribution and does not merge its board into the current park scene.
+
+## Plated Knight pawn trial — October 24, 2026
+
+Matt supplied the GLB and explicitly requested pawns in the figurine set. Embedded metadata confirms CC BY 4.0 and Ulrik Langvandsbråten (best3deu). Eight character meshes, 72,561 triangles, no skin/skeleton or animation clips. Platform/flowers excluded. Shared meshes and 24 maps resized to 512px WebP total 3.24MB. Static pawn movement/captures only; other pieces remain the existing combat figurines. Original set retained as a separate choice. See assets/plated/CREDITS.md for attribution and modifications.
