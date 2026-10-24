@@ -31,11 +31,11 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 
 | 023 | Make Minimal bottom dock the default interface design. | Implemented 2026-10-24: Minimal for new preferences; preserve explicitly saved choices. Pending live release. |
 
-| 024 | Remove the “Iron & Ivory” name from the loading screen and actual main screen; the label adds no value. | Queued 2026-10-24. |
+| 024 | Remove the “Iron & Ivory” name from the loading screen and actual main screen; the label adds no value. | Implemented 2026-10-24; pending live release. |
 
 | 025 | Matt cannot find the researched Sketchfab candidates in the UI. Make the existing six-model shortlist easier to discover from the main menu. | Cancelled by Matt 2026-10-24: found the links and says their current location is fine. Retain existing placement. |
 
-| 026 | Asset review: reject Medieval Knight (Andy Woodhead); Plated Knight looks cool and is the promising candidate. | Queued 2026-10-24: remove rejected model from active shortlist, preserve rejection in research; mark Plated Knight, Low Poly Chess Set, Realistic Chess Set and both park benches as liked candidates for file/rig/performance evaluation before adoption. |
+| 026 | Asset review: reject Medieval Knight (Andy Woodhead); Plated Knight looks cool and is the promising candidate. | Implemented 2026-10-24: rejected model removed from active shortlist, rejection preserved in research; Plated Knight, Low Poly Chess Set, Realistic Chess Set and both park benches marked liked for file/rig/performance evaluation before adoption. Pending live release. |
 
 | 027 | Add liked park bench candidates to the park scene after checking their files, licenses and performance; Matt likes both benches. | Queued 2026-10-24. Do not import listing previews or assume downloadable files are verified. |
 
