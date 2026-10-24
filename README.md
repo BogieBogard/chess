@@ -4,7 +4,7 @@ A 3D chess battlefield published at https://mbogard.com/chess/.
 
 ## Play
 
-Choose computer or pass-and-play. Starting a game opens a viewport-filling game view on desktop and mobile. Menu pauses the action and holds AI replies until you continue; it also opens settings, a new game, or the dashboard. Moves toggles the history drawer. Browser fullscreen is available where supported.
+The page opens immediately into a viewport-filling game against the computer on Medium, with you playing White. To choose Pass & Play, another difficulty or side, open Menu → Settings → New game. Setup changes apply when you press Start new game. Menu pauses the action and holds AI replies until you continue; it also opens settings, a new game, or the dashboard. Moves toggles the history drawer. Browser fullscreen is available where supported.
 
 - Tap a warrior, then a highlighted square to move. Dragging always controls the camera, including when the drag starts over a piece.
 - Drag one finger to orbit with momentum; pinch to zoom; move two fingers to pan; twist two fingers to rotate. Desktop uses drag to orbit, right-drag or Shift-drag to pan, and the wheel to zoom.

@@ -1,5 +1,10 @@
 # Daily improvements
 
+## 2026-10-24
+- Removed the welcome gate and its introductory/tagline copy. The page opens immediately into computer chess on Medium with the user as White.
+- Moved opponent, difficulty and side selection into Settings under New game. Changes apply only when starting a new game, preserving the current game when Settings is closed.
+- Validation: all 23 tests pass; browser verified immediate startup, Medium/White defaults, cancelled setup, Pass & Play and the 320px Settings layout.
+
 ## 2026-10-23
 - Shipped 792fa7e; verified the production comparison and Overhead controls at mbogard.com/chess.
 - Added full-board setting comparison: choose a candidate in Settings, preview it, toggle against the saved setting without moving the camera, then use it or go back. Preview keeps the game paused.
