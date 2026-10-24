@@ -40,7 +40,7 @@ $('showDiscarded').onchange=animationMenu;
 for(const [id,rating] of [['keepAnimation','keep'],['discardAnimation','discard'],['resetAnimation','unrated']])$(id).onclick=()=>{animationPrefs.ratings[animationPrefs.selected]=rating;if(rating==='discard'&&activeAnimation===animationPrefs.selected){activeAnimation=animationOptions.find(o=>animationPrefs.ratings[o.id]!=='discard')?.id||'instant';animationPrefs.selected=activeAnimation}rememberAnimation()};
 $('previewAnimation').onclick=()=>{const frame=$('animationPreview');frame.hidden=false;frame.src='./animation-preview.html?v=20261022-staged-1&style='+encodeURIComponent(animationPrefs.selected)+'&defender='+encodeURIComponent($('previewDefender').value)+'&attacker='+encodeURIComponent($('previewPiece').value)+'&speed='+encodeURIComponent($('animationSpeed').value)+'&replay='+Date.now()};
 animationMenu();
-function setInterface(style){if(!['classic','minimal','gallery'].includes(style))style='classic';document.body.dataset.interface=style;$('interfaceStyle').value=style;try{animationStorage?.setItem('iron-ivory-interface-v1',style)}catch{}}
+function setInterface(style){if(!['classic','minimal','gallery'].includes(style))style='minimal';document.body.dataset.interface=style;$('interfaceStyle').value=style;try{animationStorage?.setItem('iron-ivory-interface-v1',style)}catch{}}
 let savedInterface;try{savedInterface=animationStorage?.getItem('iron-ivory-interface-v1')}catch{}
 setInterface(savedInterface);
 $('interfaceStyle').onchange=()=>setInterface($('interfaceStyle').value);

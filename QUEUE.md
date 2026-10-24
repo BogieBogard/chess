@@ -29,7 +29,7 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 
 | 022 | Make piece icons a central, default-on feature in every camera view, with a one-tap main-screen toggle. Overlapping icons behind the nearest should grow darker/grayer through up to three depth layers. Replace the Fit board button with this toggle (Matt’s follow-up). | Implemented and locally verified 2026-10-24; pending live release. |
 
-| 023 | Make Minimal bottom dock the default interface design. | Queued 2026-10-24; preserve explicitly saved interface choices. |
+| 023 | Make Minimal bottom dock the default interface design. | Implemented 2026-10-24: Minimal for new preferences; preserve explicitly saved choices. Pending live release. |
 
 | 024 | Remove the “Iron & Ivory” name from the loading screen and actual main screen; the label adds no value. | Queued 2026-10-24. |
 
