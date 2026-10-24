@@ -41,7 +41,7 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 
 | 035 | Evaluate embed-only chess sets, including ahingel’s Greek Mythology Pieces, for the central model-set selector. Determine whether an embed can be playable rather than only viewable; avoid unnecessary reloads. | Evaluated 2026-10-24: official Viewer API exposes 32 separate piece transforms; moving and restoring an individual pawn succeeds without reload. Playable integration is feasible but requires a rules/picking/promotion/undo adapter and mobile performance checks. See MODEL_RESEARCH.md. No asset extraction or playable embed claimed. |
 
-| 036 | Remove both rotate buttons beside Overhead; they are unnecessary. | Implemented and locally verified 2026-10-24; deploying. Preserve drag/orbit gestures and the other camera controls. |
+| 036 | Remove both rotate buttons beside Overhead; they are unnecessary. | Shipped 2026-10-24, cb2bf38; verified live. Preserve drag/orbit gestures and the other camera controls. |
 
 | 037 | Follow-up to Matt’s embed request (035): connect the Greek Mythology set to the playable model selector if object control is supported, preserving the current game without unnecessary reloads. | Queued after the successful API evaluation. Requires rules, picking, captures, promotions and undo integration plus phone performance verification. Keep the original embedded scene and attribution. |
 
