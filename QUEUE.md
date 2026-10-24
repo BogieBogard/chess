@@ -33,9 +33,9 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 028 | Continue researching and using suitable shortlisted assets except rejected Medieval Knight. Consider using Plated Knight as the king; retain different chess-set styles where practical. | Deferred by Matt 2026-10-24 with Sketchfab work. Needs signed-in downloads for file, rig and performance checks. |
 | 029 | Add a fast main-screen model-set switch, potentially top-left: current stylized animated figurines versus conventional chess pieces, preferably the Realistic set (Low Poly is also liked). Conventional pieces should use simple captures rather than sword combat. | Deferred with Sketchfab work 2026-10-24; depends on actual model files and evaluation in 028. Preserve both styles and make switching quick. |
 | 030 | Remove “Drag to orbit · Pinch to zoom · Tap to move” from the main game screen; confirm Minimal bottom dock default. | Shipped in 400fb24 and 962db09; verified live. |
-| 031 | Make Park · golden hour the default environment. | Implemented 2026-10-24. Matt clarified Golden Hour is the worthwhile setting; make it standard without adding a quick toggle. |
-| 032 | Refine icon depth shading: gray only almost-covered icons, not slight overlaps. In the lowest White-side view, covered White pawns should gray while barely overlapping Black pieces remain crisp. | In progress 2026-10-24: require at least 70% icon coverage, based on actual coverage; computer opponent icons stay crisp as requested. |
-| 033 | Hide Flip board against the computer; only show it in Pass & Play. | In progress 2026-10-24. |
+| 031 | Make Park · golden hour the default environment. | Shipped 2026-10-24, a3ffee2: Golden Hour default, including migration of the old automatic afternoon default; no new toggle. Verified live. |
+| 032 | Refine icon depth shading: gray only almost-covered icons, not slight overlaps. In the lowest White-side view, covered White pawns should gray while barely overlapping Black pieces remain crisp. | Shipped 2026-10-24, a3ffee2: at least 70% coverage required; computer opponent icons stay crisp. Tested and verified live. |
+| 033 | Hide Flip board against the computer; only show it in Pass & Play. | Shipped 2026-10-24, a3ffee2; browser verified both modes and live computer mode. |
 
 ## Working rules
 

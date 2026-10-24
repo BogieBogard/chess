@@ -1,6 +1,7 @@
 # Daily improvements
 
 ## 2026-10-24
+- Shipped a3ffee2 and verified Golden Hour, Icons on, computer-mode Flip hidden, and clear Minimal dock on the live page. No console errors in the verified session.
 - Final validation: all 30 tests pass, including mostly-covered icon thresholds, opponent readability and Golden Hour preference migration. Browser verified default setting/layout, computer/Pass & Play Flip visibility and dock clearance.
 - Golden Hour now replaces the old automatic afternoon default, while explicit saved choices/discards remain intact. No new environment toggle.
 - Refined depth shading to require 70% coverage; computer-opponent icons remain crisp. Flip board is available only in Pass & Play.
