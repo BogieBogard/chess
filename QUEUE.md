@@ -46,12 +46,12 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 037 | Follow-up to Matt’s embed request (035): connect the Greek Mythology set to the playable model selector if object control is supported, preserving the current game without unnecessary reloads. | Shipped 2026-10-24, a747e3c. 40 tests pass; browser verified AI play, switching, capture/undo, saved reload and aligned phone icons. Live Greek selection and pawn movement verified. Extra promoted roles use an approved pawn/badge representation; original scene and attribution retained. |
 
 | 038 | Search Sketchfab for higher-quality character replacements for the current figurines, prioritizing a usable skeleton/rig so they can support articulated combat. Current figurines are not high quality enough. | Researched 2026-10-24: three new creator-listed rigged candidates, source links and tradeoffs added to Settings and research. Actual rig files and mobile budgets remain unverified; no new character adopted. Rejected Medieval Knight remains excluded. |
-| 039 | Make the imported Realistic set the default because the current figurines do not yet deliver a quality experience. | Implemented 2026-10-24: Realistic fallback for new preferences; explicit saved styles and all comparisons retained. Validating. |
+| 039 | Make the imported Realistic set the default because the current figurines do not yet deliver a quality experience. | Shipped 2026-10-24, 39f1c02: Realistic default verified with fresh preferences; explicit saved styles retained. |
 
-| 040 | Remove the plus and minus zoom buttons. | Implemented 2026-10-24; validating. Preserve pinch and scroll zoom. |
+| 040 | Remove the plus and minus zoom buttons. | Shipped 2026-10-24, 39f1c02; buttons absent on live page. Pinch and scroll zoom retained. |
 
-| 041 | Put the board-set dropdown in the shared horizontal dock alongside Icons and Overhead; these should be its only components. Keep the layout clean and easy to understand. | Implemented 2026-10-24; validating. Floating selector and Battle view removed from dock; Flip moved into Pass & Play menu. Orbit gestures preserved. |
-| 042 | Remove useless pause-menu copy: Take a breath, Battle paused, and Return when ready / Your army will wait. | Implemented 2026-10-24; validating. Menu actions retained. |
+| 041 | Put the board-set dropdown in the shared horizontal dock alongside Icons and Overhead; these should be its only components. Keep the layout clean and easy to understand. | Shipped 2026-10-24, 39f1c02; three-control dock verified at 320px and live. Floating selector and Battle view removed from dock; Flip moved into Pass & Play menu. Orbit gestures preserved. |
+| 042 | Remove useless pause-menu copy: Take a breath, Battle paused, and Return when ready / Your army will wait. | Shipped 2026-10-24, 39f1c02; live menu contains actions without the filler copy. |
 
 ## Working rules
 

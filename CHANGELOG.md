@@ -1,6 +1,7 @@
 # Daily improvements
 
 ## 2026-10-24
+- Final release 39f1c02 verified live: saved Greek loading, actual pawn move/computer reply, exactly three dock controls, no pause filler, eight candidate links, and no new console errors. Fresh preferences start in Realistic. Forty tests pass; phone checks covered 320px dock layout and 390px Greek icon alignment.
 - Simplified the dock to Icons, Overhead and the set selector on one horizontal row. Removed zoom/Battle view buttons, moved Pass & Play Flip into the menu, and removed the three pause-menu filler lines. Realistic is the default for new preferences; explicit saved styles remain available.
 - Added three rigged-character research candidates with direct phone-friendly links in Settings: The Knight of Tomorrow, Pale Knight Animated, and The Forgotten Knight. Listings describe rigs; actual files and mobile performance are still unverified. No character was adopted based only on listing tags.
 - Connected the Greek Mythology embed to the live chess rules as an optional beta set. The adapter maps all 32 source transforms, handles legal destinations, captures, computer play, undo, castling, en passant, and promotion role badges. Model switching retains the game; the inactive renderer stops rendering. Original Sketchfab scene and attribution remain intact, with no geometry extraction.

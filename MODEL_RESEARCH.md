@@ -43,7 +43,7 @@ Verified with the official Viewer API in a local test page: viewerready succeeds
 
 A playable option is technically feasible through an embed-specific adapter: map the 32 transforms to chess squares, route picking/legal moves through our rules, hide captures, handle promotions (reuse a matching piece node), restore undo, and set camera presets. The embedded set retains Sketchfab's own board, scene, loading and attribution; it cannot become a mesh style inside our Three.js park just by embedding. It also depends on a live third-party viewer; mobile loading/performance must be checked before shipping it as a game mode. Source is offered on the store; embedding access does not establish a license to extract or redistribute the models.
 
-Official reference: [Viewer API object controls](https://sketchfab.com/developers/viewer/functions), [initialization](https://sketchfab.com/developers/viewer/initialization). Evaluation complete; this set is not advertised as a playable selection yet.
+Official reference: [Viewer API object controls](https://sketchfab.com/developers/viewer/functions), [initialization](https://sketchfab.com/developers/viewer/initialization). At this evaluation stage the set was not yet playable. Follow-up: the optional playable Greek beta shipped as a747e3c; see GREEK_EMBED.md for integration behavior, promotion representation and hosted-viewer limitations.
 
 ## Higher-quality rigged character search — October 24, 2026
 
