@@ -1,4 +1,4 @@
-import { iconDepth } from './icon-depth.js';
+import { iconDepth } from './icon-depth.js?v=20261024-depth-2';
 import * as T from './vendor/three.module.min.js';
 import { warrior, pose, setPieceMaterials, disposeWarrior } from './pieces.js?v=20261021-park-1';
 import { CameraGestures } from './camera-controls.js';
@@ -53,6 +53,7 @@ export class Battlefield {
   this.renderer.shadowMap.needsUpdate=true;
  }
  setGraphics(quality){this.renderer.shadowMap.enabled=quality!=='light';this.renderer.setPixelRatio(Math.min(devicePixelRatio,quality==='light'?1:1.8));this.renderer.shadowMap.needsUpdate=true;}
+ setIconSide(side){this.iconSide=side}
  setPieceIcons(enabled){this.pieceIconsEnabled=!!enabled;this.updatePieceIcons()}
  updatePieceIcons(){
   this.iconLayer.hidden=!this.pieceIconsEnabled;if(!this.pieceIconsEnabled)return;
@@ -67,7 +68,7 @@ export class Battlefield {
    if(!icon){icon=document.createElement('span');icon.className='piece-icon '+(code[0]==='w'?'ivory':'obsidian');icon.textContent=symbols[code[1]];icon.title=(code[0]==='w'?'White ':'Black ')+names[code[1]];this.iconLayer.append(icon);this.unitIcons.set(unit,icon)}
    const point=unit.position.clone().setY(.12).project(this.camera);
    icon.hidden=!unit.visible||Math.abs(point.x)>1||Math.abs(point.y)>1||point.z< -1||point.z>1;
-   points.push({icon,x:(point.x+1)*w/2,y:(1-point.y)*h/2,depth:point.z,size,hidden:icon.hidden});
+   points.push({icon,x:(point.x+1)*w/2,y:(1-point.y)*h/2,depth:point.z,size,hidden:icon.hidden,shadeEligible:!this.iconSide||code[0]===this.iconSide});
    icon.style.left=(point.x+1)*w/2+'px';icon.style.top=(1-point.y)*h/2+'px';icon.style.width=icon.style.height=size+'px';icon.style.fontSize=size*.78+'px';
   }
   for(const {icon,layer,order} of iconDepth(points)){icon.dataset.depth=layer;icon.style.zIndex=order;icon.style.filter=`brightness(${[1,.84,.70,.58][layer]}) saturate(${[1,.65,.35,.15][layer]})`}

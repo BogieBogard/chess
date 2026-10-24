@@ -1,6 +1,10 @@
 # Daily improvements
 
 ## 2026-10-24
+- Final validation: all 30 tests pass, including mostly-covered icon thresholds, opponent readability and Golden Hour preference migration. Browser verified default setting/layout, computer/Pass & Play Flip visibility and dock clearance.
+- Golden Hour now replaces the old automatic afternoon default, while explicit saved choices/discards remain intact. No new environment toggle.
+- Refined depth shading to require 70% coverage; computer-opponent icons remain crisp. Flip board is available only in Pass & Play.
+- The icon/dock/name-removal/review batch was verified live at f136342. Sketchfab integrations are explicitly deferred by Matt until available for sign-in.
 - Follow-up batch validation: 27 tests pass. Browser verified 320px toolbar, all-view icons and saved toggle state, Minimal defaults with retained saved Classic, and unbranded loading/main screens.
 - Recorded Matt’s asset reviews: Medieval Knight rejected and removed from the active shortlist; Plated Knight, both chess sets and both benches marked liked. Existing Settings placement retained at Matt’s request.
 - Removed the app name from the loading screen, HUD, dashboard branding and page title. The turn status remains visible.

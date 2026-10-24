@@ -8,9 +8,10 @@ export function loadAppearance(storage){
  let saved={};try{saved=JSON.parse(storage?.getItem(key)||'{}')||{}}catch{}
  let legacy;try{legacy=storage?.getItem('iron-ivory-environment-v1')}catch{}
  const ratings=Object.fromEntries(appearanceOptions.map(o=>[o.id,['keep','discard'].includes(saved.ratings?.[o.id])?saved.ratings[o.id]:'unrated']));
+ // Legacy afternoon was automatically saved on startup; replace that old default with Golden Hour.
  // Even corrupt preferences must leave an available setting; never revive a discarded choice.
  const available=appearanceOptions.filter(o=>ratings[o.id]!=='discard');
- const selected=[saved.selected,legacy,'park',...available.map(o=>o.id)].find(id=>available.some(o=>o.id===id))||null;
+ const selected=[saved.selected,legacy==='park'?null:legacy,'sunset',...available.map(o=>o.id)].find(id=>available.some(o=>o.id===id))||null;
  return {selected,ratings};
 }
 export function saveAppearance(storage,prefs){try{storage.setItem(key,JSON.stringify(prefs));storage.setItem('iron-ivory-environment-v1',prefs.selected);return true}catch{return false}}

@@ -14,8 +14,14 @@ test('discarding active setting chooses an available fallback and never revives 
  rateAppearance(prefs,'park','unrated');assert.equal(prefs.selected,'studio');
 });
 test('unavailable storage and invalid data leave usable choices without throwing',()=>{
- assert.equal(loadAppearance().selected,'park');assert.equal(saveAppearance(undefined,loadAppearance()),false);
- assert.equal(loadAppearance(storage({'iron-ivory-appearance-v1':'null'})).selected,'park');
+ assert.equal(loadAppearance().selected,'sunset');assert.equal(saveAppearance(undefined,loadAppearance()),false);
+ assert.equal(loadAppearance(storage({'iron-ivory-appearance-v1':'null'})).selected,'sunset');
  const prefs=loadAppearance(storage({'iron-ivory-appearance-v1':JSON.stringify({selected:'sunset',ratings:{sunset:'discard'}})}));
  assert.equal(prefs.selected,'park');assert.equal(prefs.ratings.sunset,'discard');
+});
+
+test('Golden Hour replaces the old automatic default while explicit choices and discards survive',()=>{
+ assert.equal(loadAppearance(storage({'iron-ivory-environment-v1':'park'})).selected,'sunset');
+ assert.equal(loadAppearance(storage({'iron-ivory-appearance-v1':JSON.stringify({selected:'park'})})).selected,'park');
+ assert.notEqual(loadAppearance(storage({'iron-ivory-appearance-v1':JSON.stringify({ratings:{sunset:'discard'}})})).selected,'sunset');
 });

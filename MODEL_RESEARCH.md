@@ -16,3 +16,7 @@ Before integration, inspect the downloaded license and include the creator, sour
 ## Review — October 24, 2026
 
 Matt likes Plated Knight, both conventional chess sets and both benches. He suggested using Plated Knight as the king and asked to continue evaluating usable assets. Medieval Knight is explicitly rejected and removed from the live active shortlist. No files have been imported; file, license, rig and mobile-performance inspection is still required.
+
+## Download access — October 24, 2026
+
+Direct browser inspection confirms Classic Park Bench lists CC BY 4.0, 4.8k triangles and 2.7k vertices. Its Download 3D Model action opens Sketchfab sign-in. Matt has an account but explicitly deferred Sketchfab work until back at his computer. No matching downloaded archives were found by filename in Downloads. Do not scrape viewer data as a substitute for source downloads. Next: signed-in source/GLB download, archive/license inspection, texture/draw-call budgets, scale normalization, then phone profiling. Benches, alternate king, and the model-set switch remain deferred rather than claimed shipped.
