@@ -14,7 +14,7 @@ function bevelBox(w,h,d,r=.035){const s=new T.Shape();s.moveTo(-w/2+r,-d/2);s.li
 export class Battlefield {
  constructor(host,onSquare){
   this.ready=new Promise((resolve,reject)=>{this.resolveReady=resolve;this.rejectReady=reject});
-  this.pieceIconsEnabled=false;this.host=host;this.units=new Map();this.tiles=[];this.effects=[];this.count=0;this.flip=false;this.paused=false;this.angle=0;this.elevation=1.49;this.distance=17;this.target=new T.Vector3(0,.35,0);
+  this.pieceSet='figurines';this.pieceIconsEnabled=false;this.host=host;this.units=new Map();this.tiles=[];this.effects=[];this.count=0;this.flip=false;this.paused=false;this.angle=0;this.elevation=1.49;this.distance=17;this.target=new T.Vector3(0,.35,0);
   this.scene=new T.Scene();this.scene.background=new T.Color('#121b22');this.scene.fog=new T.Fog('#121b22',65,140);this.camera=new T.PerspectiveCamera(39,1,.1,220);
   this.renderer=new T.WebGLRenderer({antialias:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.shadowMap.autoUpdate=false;this.renderer.shadowMap.needsUpdate=true;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;host.append(this.renderer.domElement);this.iconLayer=document.createElement('div');this.iconLayer.className='piece-icon-layer';this.iconLayer.setAttribute('aria-hidden','true');this.iconLayer.hidden=true;host.append(this.iconLayer);this.unitIcons=new Map();
   this.renderer.domElement.setAttribute('aria-label','3D chess. Tap to select and move. Drag to orbit. Pinch to zoom; two fingers to pan or twist.');
@@ -53,6 +53,11 @@ export class Battlefield {
   this.renderer.shadowMap.needsUpdate=true;
  }
  setGraphics(quality){this.renderer.shadowMap.enabled=quality!=='light';this.renderer.setPixelRatio(Math.min(devicePixelRatio,quality==='light'?1:1.8));this.renderer.shadowMap.needsUpdate=true;}
+ setPieceSet(id,factory){
+  if(this.pieceSet===id)return;
+  for(const unit of this.units.values()){this.scene.remove(unit);disposeWarrior(unit)}this.units.clear();
+  this.pieceSet=id;this.pieceFactory=factory||warrior;this.renderer.shadowMap.needsUpdate=true;
+ }
  setIconSide(side){this.iconSide=side}
  setPieceIcons(enabled){this.pieceIconsEnabled=!!enabled;this.updatePieceIcons()}
  updatePieceIcons(){
@@ -82,7 +87,7 @@ export class Battlefield {
  zoom(ratio){this.distance=T.MathUtils.clamp(this.distance*ratio,4.5,85);this.cameraUpdate()}
  pan(dx,dy){const scale=2*this.distance*Math.tan(T.MathUtils.degToRad(this.camera.fov/2))/this.host.clientHeight,a=this.angle+(this.flip?Math.PI:0);this.target.x+=(-Math.cos(a)*dx-Math.sin(a)*dy)*scale;this.target.z+=(Math.sin(a)*dx-Math.cos(a)*dy)*scale;this.target.x=T.MathUtils.clamp(this.target.x,-4,4);this.target.z=T.MathUtils.clamp(this.target.z,-4,4);this.cameraUpdate()}
  cameraUpdate(){const a=this.angle+(this.flip?Math.PI:0),d=Math.max(this.distance,.65/Math.sin(this.elevation));this.camera.position.set(this.target.x+Math.sin(a)*Math.cos(this.elevation)*d,this.target.y+Math.sin(this.elevation)*d,this.target.z+Math.cos(a)*Math.cos(this.elevation)*d);this.camera.lookAt(this.target);const outdoor=this.environmentStyle&&this.environmentStyle!=='studio';this.scene.fog.near=d+(outdoor?90:25);this.scene.fog.far=d+(outdoor?450:90);this.camera.far=d+(outdoor?650:150);this.camera.updateProjectionMatrix()}
- sync(game,selected,flipped,last){this.renderer.shadowMap.needsUpdate=true;if(this.flip!==flipped){this.flip=flipped;this.cameraUpdate()}for(let [i,g]of this.units)if(game.b[i]!==g.userData.code){this.scene.remove(g);disposeWarrior(g);this.units.delete(i)}for(let i=0;i<64;i++)if(game.b[i]&&!this.units.has(i)){const g=warrior(game.b[i]);g.position.copy(pos(i));g.userData.square=i;this.units.set(i,g);this.scene.add(g)}const moves=selected<0?[]:game.legal().filter(m=>m.f===selected),legal=[...new Set(moves.map(m=>m.t))];
+ sync(game,selected,flipped,last){this.renderer.shadowMap.needsUpdate=true;if(this.flip!==flipped){this.flip=flipped;this.cameraUpdate()}for(let [i,g]of this.units)if(game.b[i]!==g.userData.code){this.scene.remove(g);disposeWarrior(g);this.units.delete(i)}for(let i=0;i<64;i++)if(game.b[i]&&!this.units.has(i)){const g=(this.pieceFactory||warrior)(game.b[i]);g.position.copy(pos(i));g.userData.square=i;this.units.set(i,g);this.scene.add(g)}const moves=selected<0?[]:game.legal().filter(m=>m.f===selected),legal=[...new Set(moves.map(m=>m.t))];
  if(!this.moveMarkers){this.moveMarkers=new T.Group();this.scene.add(this.moveMarkers);this.moveMarkerGeometry={dot:new T.CircleGeometry(.17,24),ring:new T.RingGeometry(.37,.44,32),selected:new T.RingGeometry(.40,.44,32)};this.moveMarkerMaterial={move:new T.MeshBasicMaterial({color:'#8ef0c5',side:T.DoubleSide,depthWrite:false}),capture:new T.MeshBasicMaterial({color:'#ffca73',side:T.DoubleSide,depthWrite:false}),selected:new T.MeshBasicMaterial({color:'#ffe0a1',side:T.DoubleSide,depthWrite:false})};}
  this.moveMarkers.clear();
  const marker=(square,kind)=>{const mesh=new T.Mesh(this.moveMarkerGeometry[kind==='move'?'dot':kind==='capture'?'ring':'selected'],this.moveMarkerMaterial[kind]);mesh.rotation.x=-Math.PI/2;mesh.position.copy(pos(square)).setY(.085);mesh.userData={square,kind};mesh.renderOrder=2;this.moveMarkers.add(mesh)};
@@ -137,7 +142,7 @@ for(let i=0;i<64;i++){this.tiles[i].material.emissive.set(i===selected?'#926a23'
  }
  async animate(game,m,speed,onEvent,animation='duel'){
   if(animation==='instant'||speed==='skip'||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const g=this.units.get(m.f);if(!g)return;if(stagedStyles.includes(animation))return animateStaged(this,game,m,speed,onEvent,animation);const pawn=g.userData.code[1]==='p',type=g.userData.code[1],from=pos(m.f),to=pos(m.t),vi=m.ep?m.t+(game.turn==='w'?8:-8):m.t,victim=this.units.get(vi),original=g.rotation.y,k=speed==='fast'?.48:1,style=captureStyle(g.userData.code,victim?.userData.code,m.f,m.t,this.count++),body=g.userData.body,arm=g.userData.arm;
+  const g=this.units.get(m.f);if(!g)return;if(g.userData.modelSet==='realistic')return this.animateSimple(game,m,speed,onEvent,['glide','crossfade','shrink','sink','hop','arc'].includes(animation)?animation:'glide');if(stagedStyles.includes(animation))return animateStaged(this,game,m,speed,onEvent,animation);const pawn=g.userData.code[1]==='p',type=g.userData.code[1],from=pos(m.f),to=pos(m.t),vi=m.ep?m.t+(game.turn==='w'?8:-8):m.t,victim=this.units.get(vi),original=g.rotation.y,k=speed==='fast'?.48:1,style=captureStyle(g.userData.code,victim?.userData.code,m.f,m.t,this.count++),body=g.userData.body,arm=g.userData.arm;
   const profile=duelProfiles[animation];
   if(!profile)return this.animateSimple(game,m,speed,onEvent,animation);
   if(type==='r')return this.animateRook(game,m,speed,onEvent,profile);

@@ -34,4 +34,4 @@ No build or package installation is required. Run `npm run preview` and open htt
 - `destruction.js`: solid geometry fracture, debris physics, dust, fading, and cleanup.
 - `vendor/`: Three.js 0.180.0 and its MIT license, served locally.
 
-Push `main` to deploy via GitHub Pages. All models and surface textures are generated locally in code. No external model, texture service, build step, or runtime CDN is required.
+Push `main` to deploy via GitHub Pages. The default figurines and board are generated locally. The optional Realistic set is a locally served, attributed CC BY 4.0 model by BenAissa_Karim, extracted from Matt’s supplied GLB. Use the central set selector to switch without restarting the game. Its 1.78MB asset loads on demand; no runtime CDN is required. See assets/realistic/CREDITS.md.

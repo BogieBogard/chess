@@ -1,6 +1,9 @@
 # Daily improvements
 
 ## 2026-10-24
+- Model-switch validation: 33 tests pass. Browser verified imported materials, phone layout, a real e2–e4 move, switching sets without losing that move, and saved Realistic selection after reload.
+- Added a central main-screen set selector: current figurines or the imported Realistic Chess Set by BenAissa_Karim (CC BY 4.0). Switching preserves the current game and saved combat choice; selection persists across reload.
+- Realistic pieces use simple movement/captures, including castling and en passant, rather than combat choreography. Lazy-loaded, shared and quantized piece templates reduce the source download from 18.42MB to 1.78MB plus metadata. Credits link includes source, creator, license and modifications.
 - Shipped a3ffee2 and verified Golden Hour, Icons on, computer-mode Flip hidden, and clear Minimal dock on the live page. No console errors in the verified session.
 - Final validation: all 30 tests pass, including mostly-covered icon thresholds, opponent readability and Golden Hour preference migration. Browser verified default setting/layout, computer/Pass & Play Flip visibility and dock clearance.
 - Golden Hour now replaces the old automatic afternoon default, while explicit saved choices/discards remain intact. No new environment toggle.

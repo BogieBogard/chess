@@ -20,3 +20,13 @@ Matt likes Plated Knight, both conventional chess sets and both benches. He sugg
 ## Download access — October 24, 2026
 
 Direct browser inspection confirms Classic Park Bench lists CC BY 4.0, 4.8k triangles and 2.7k vertices. Its Download 3D Model action opens Sketchfab sign-in. Matt has an account but explicitly deferred Sketchfab work until back at his computer. No matching downloaded archives were found by filename in Downloads. Do not scrape viewer data as a substitute for source downloads. Next: signed-in source/GLB download, archive/license inspection, texture/draw-call budgets, scale normalization, then phone profiling. Benches, alternate king, and the model-set switch remain deferred rather than claimed shipped.
+
+## Supplied GLBs inspected — October 24, 2026
+
+Matt supplied Realistic Chess Set (18,422,664 bytes) and Plated Knight (25,146,716 bytes) in Downloads. Both contain embedded CC BY 4.0 attribution matching the listed creators.
+
+Realistic Chess Set has 33 separate meshes (32 pieces plus board), 3 materials, one board image, no skins and no animation clips. Six canonical white piece geometries were extracted, world transforms baked and bases centered. Shared templates and 16-bit positions/8-bit normals reduce the game asset to 1,775,160 bytes plus metadata; the board texture is omitted. Black and white source material colors are retained. The full army still contains approximately 762.7k piece triangles; only six geometry buffers and two materials are shared across 32 single-mesh pieces. Tests cover square fit, bounds, resource sharing, castling, en passant and capture routing. The imported style uses simple captures while the figurine animation preference stays intact.
+
+Plated Knight’s supplied GLB has 18 meshes: 8 armor/character meshes plus platform and decorative flowers. It contains 32 images, no skins, no joint weights and no animation clips. This contradicts treating this particular download as ready-rigged. A pawn experiment needs deliberate rigid-part articulation or a different rigged source; a mesh swap cannot reuse the existing kneeling/walking/sword rig automatically. No Plated mesh imported into production yet.
+
+Greek Mythology Pieces by ahingel: embed supplied by Matt. Official Viewer API documents node maps, local transform control and click events, so no full-page reload is inherently necessary. This model still needs a node-separation and usage check before it can be called playable. Embedding is not source-model redistribution and does not merge its board into the current park scene.
