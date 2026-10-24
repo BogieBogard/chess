@@ -25,13 +25,21 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 019 | Remove welcome-page copy (Welcome to the battlefield, Claim your crown, strategy/soul text, Your allegiance, and No clocks/No rush/next move). Start immediately vs computer, Medium, as White; put alternatives such as Pass & Play in Settings. | Shipped 2026-10-24, f44c661: immediate Medium/White computer game; setup in Settings; welcome copy and bottom tagline removed. Verified live. |
 
 | 020 | Replace the initial flash of the old dashboard (“The battlefield comes alive”) with a modern, elegant loading process. | Shipped 2026-10-24, 7e7890b: minimal loading shell, first populated frame reveal, reduced-motion support and retry. Verified live. |
-| 021 | After loading work: default to Overhead; move both Overhead and Battle view one “+” step closer because the game is too zoomed out by default. | In progress 2026-10-24. Matt confirmed both views. |
+| 021 | After loading work: default to Overhead; move both Overhead and Battle view one “+” step closer because the game is too zoomed out by default. | Shipped 2026-10-24, c04e5a2: Overhead default, both presets one zoom step closer; verified live. |
 
-| 022 | Make piece icons a central, default-on feature in every camera view, with a one-tap main-screen toggle. Overlapping icons behind the nearest should grow darker/grayer through up to three depth layers. Replace the Fit board button with this toggle (Matt’s follow-up). | Queued 2026-10-24, after camera item 021. |
+| 022 | Make piece icons a central, default-on feature in every camera view, with a one-tap main-screen toggle. Overlapping icons behind the nearest should grow darker/grayer through up to three depth layers. Replace the Fit board button with this toggle (Matt’s follow-up). | Implemented and locally verified 2026-10-24; pending live release. |
 
 | 023 | Make Minimal bottom dock the default interface design. | Queued 2026-10-24; preserve explicitly saved interface choices. |
 
 | 024 | Remove the “Iron & Ivory” name from the loading screen and actual main screen; the label adds no value. | Queued 2026-10-24. |
+
+| 025 | Matt cannot find the researched Sketchfab candidates in the UI. Make the existing six-model shortlist easier to discover from the main menu. | Cancelled by Matt 2026-10-24: found the links and says their current location is fine. Retain existing placement. |
+
+| 026 | Asset review: reject Medieval Knight (Andy Woodhead); Plated Knight looks cool and is the promising candidate. | Queued 2026-10-24: remove rejected model from active shortlist, preserve rejection in research; mark Plated Knight, Low Poly Chess Set, Realistic Chess Set and both park benches as liked candidates for file/rig/performance evaluation before adoption. |
+
+| 027 | Add liked park bench candidates to the park scene after checking their files, licenses and performance; Matt likes both benches. | Queued 2026-10-24. Do not import listing previews or assume downloadable files are verified. |
+
+| 028 | Continue researching and using suitable shortlisted assets except rejected Medieval Knight. Consider using Plated Knight as the king; retain different chess-set styles where practical. | Queued 2026-10-24: investigate actual files, licensing, rigs and performance before adoption. |
 
 ## Working rules
 

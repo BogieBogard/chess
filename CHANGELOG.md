@@ -1,6 +1,9 @@
 # Daily improvements
 
 ## 2026-10-24
+- Added a saved, default-on Icons toggle in place of Fit board. Icons remain available in every camera view. Screen-space overlap uses front-to-back ordering and three darker/desaturated rear layers; unobscured icons remain crisp. Removed the floating gesture helper that obscured the near rank.
+- Icon validation: depth-layer tests cover overlaps, ordering, hidden pieces and the three-layer cap. Browser checks verify saved toggle state across reload and the low-angle overlap appearance.
+- Camera release c04e5a2 verified live.
 - Camera presets now start Overhead and frame both Overhead and Battle one zoom-in step closer. Projection checks confirm the full playing surface stays visible on phone and desktop.
 - Loading release 7e7890b verified live: no dashboard flash, loader dismissed after populated frame.
 - Loading validation: all 23 tests pass. Browser verified the pre-script shell, 320px layout, first-frame reveal and failed-import retry.
