@@ -1,6 +1,8 @@
 # Daily improvements
 
 ## 2026-10-24
+- Connected the Greek Mythology embed to the live chess rules as an optional beta set. The adapter maps all 32 source transforms, handles legal destinations, captures, computer play, undo, castling, en passant, and promotion role badges. Model switching retains the game; the inactive renderer stops rendering. Original Sketchfab scene and attribution remain intact, with no geometry extraction.
+- Greek validation: 40 tests pass; browser verified e2–e4 and computer reply, switching sets without losing the position, a pawn capture and undo restoring both pieces.
 - Release cb2bf38 verified live: Plated pawns selected, both rotate controls absent, remaining camera controls visible and no console errors.
 - Plated pawn release e429792 verified live with original textures and no console errors. All 36 tests pass, including hybrid captures, en passant, shared-resource cleanup and board fit. Browser verified moving a pawn, changing sets without losing the move, saved selection after reload, and phone layout.
 - Removed both camera rotation buttons; orbit gestures, Battle view, Overhead and zoom remain. Evaluated the Greek Mythology embed using its official Viewer API: all 32 pieces expose transforms and individual pawn movement/restoration succeeds. A full playable embed still needs a separate game adapter; research records that distinction.

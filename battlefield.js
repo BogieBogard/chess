@@ -36,8 +36,9 @@ export class Battlefield {
    zoom:ratio=>this.zoom(ratio),pan:(dx,dy)=>this.pan(dx,dy)
   });
   this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();let last=performance.now();
-  this.renderer.setAnimationLoop(now=>{let dt=Math.min(.1,Math.max(0,(now-last)/1000));last=now;this.gestures.update(dt);if(!this.paused){if(this.effects.length)this.renderer.shadowMap.needsUpdate=true;for(let effect of [...this.effects])if(!effect.update(dt)){effect.dispose();this.effects.splice(this.effects.indexOf(effect),1)}}try{this.renderer.render(this.scene,this.camera);if(this.units.size&&this.resolveReady){this.resolveReady();this.resolveReady=null;this.rejectReady=null}}catch(error){if(this.rejectReady){this.rejectReady(error);this.resolveReady=null;this.rejectReady=null;this.renderer.setAnimationLoop(null)}else throw error}this.updatePieceIcons()});
+  this.renderer.setAnimationLoop(now=>{if(this.active===false){last=now;return}let dt=Math.min(.1,Math.max(0,(now-last)/1000));last=now;this.gestures.update(dt);if(!this.paused){if(this.effects.length)this.renderer.shadowMap.needsUpdate=true;for(let effect of [...this.effects])if(!effect.update(dt)){effect.dispose();this.effects.splice(this.effects.indexOf(effect),1)}}try{this.renderer.render(this.scene,this.camera);if(this.units.size&&this.resolveReady){this.resolveReady();this.resolveReady=null;this.rejectReady=null}}catch(error){if(this.rejectReady){this.rejectReady(error);this.resolveReady=null;this.rejectReady=null;this.renderer.setAnimationLoop(null)}else throw error}this.updatePieceIcons()});
  }
+ setActive(active){this.active=active;this.renderer.domElement.style.display=active?'':'none';this.iconLayer.style.display=active?'':'none'}
  setEnvironment(style){
   if(!['studio','park','sunset'].includes(style))style='studio';
   const outdoor=style!=='studio',sunset=style==='sunset';
