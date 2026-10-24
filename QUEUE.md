@@ -37,11 +37,13 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 032 | Refine icon depth shading: gray only almost-covered icons, not slight overlaps. In the lowest White-side view, covered White pawns should gray while barely overlapping Black pieces remain crisp. | Shipped 2026-10-24, a3ffee2: at least 70% coverage required; computer opponent icons stay crisp. Tested and verified live. |
 | 033 | Hide Flip board against the computer; only show it in Pass & Play. | Shipped 2026-10-24, a3ffee2; browser verified both modes and live computer mode. |
 
-| 034 | Try the downloaded Plated Knight as pawns in the combat figurine set, as a comparison experiment to see whether it works. | In progress 2026-10-24, after shipped conventional set. Download has no skeleton; preparing a static-mesh pawn comparison with simple capture behavior. Preserve the current figurines. |
+| 034 | Try the downloaded Plated Knight as pawns in the combat figurine set, as a comparison experiment to see whether it works. | Shipped 2026-10-24, e429792: separate Plated pawns trial alongside original figurines, shared textured meshes and simple movement/captures. 36 tests pass; verified live with original textures and no console errors. |
 
-| 035 | Evaluate embed-only chess sets, including ahingel’s Greek Mythology Pieces, for the central model-set selector. Determine whether an embed can be playable rather than only viewable; avoid unnecessary reloads. | In progress research 2026-10-24. Source supplied by Matt: Sketchfab model 10b53b9575294dfb915f8c0b5ea0a2fc. |
+| 035 | Evaluate embed-only chess sets, including ahingel’s Greek Mythology Pieces, for the central model-set selector. Determine whether an embed can be playable rather than only viewable; avoid unnecessary reloads. | Evaluated 2026-10-24: official Viewer API exposes 32 separate piece transforms; moving and restoring an individual pawn succeeds without reload. Playable integration is feasible but requires a rules/picking/promotion/undo adapter and mobile performance checks. See MODEL_RESEARCH.md. No asset extraction or playable embed claimed. |
 
-| 036 | Remove both rotate buttons beside Overhead; they are unnecessary. | Queued 2026-10-24. Preserve drag/orbit gestures and the other camera controls. |
+| 036 | Remove both rotate buttons beside Overhead; they are unnecessary. | Implemented and locally verified 2026-10-24; deploying. Preserve drag/orbit gestures and the other camera controls. |
+
+| 037 | Follow-up to Matt’s embed request (035): connect the Greek Mythology set to the playable model selector if object control is supported, preserving the current game without unnecessary reloads. | Queued after the successful API evaluation. Requires rules, picking, captures, promotions and undo integration plus phone performance verification. Keep the original embedded scene and attribution. |
 
 ## Working rules
 

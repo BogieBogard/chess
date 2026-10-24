@@ -1,6 +1,8 @@
 # Daily improvements
 
 ## 2026-10-24
+- Plated pawn release e429792 verified live with original textures and no console errors. All 36 tests pass, including hybrid captures, en passant, shared-resource cleanup and board fit. Browser verified moving a pawn, changing sets without losing the move, saved selection after reload, and phone layout.
+- Removed both camera rotation buttons; orbit gestures, Battle view, Overhead and zoom remain. Evaluated the Greek Mythology embed using its official Viewer API: all 32 pieces expose transforms and individual pawn movement/restoration succeeds. A full playable embed still needs a separate game adapter; research records that distinction.
 - Added the Plated Knight pawn trial as a third central set choice. Imported textured pawns sit alongside the existing combat figurines; original Figurines and Realistic remain available. Simple motion handles the unrigged pawns and their captures. Shared character meshes and 512px textures reduce the supplied 25.15MB download to 3.24MB, with creator/license credits.
 - Model-switch validation: 33 tests pass. Browser verified imported materials, phone layout, a real e2–e4 move, switching sets without losing that move, and saved Realistic selection after reload.
 - Added a central main-screen set selector: current figurines or the imported Realistic Chess Set by BenAissa_Karim (CC BY 4.0). Switching preserves the current game and saved combat choice; selection persists across reload.

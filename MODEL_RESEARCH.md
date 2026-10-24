@@ -34,3 +34,13 @@ Greek Mythology Pieces by ahingel: embed supplied by Matt. Official Viewer API d
 ## Plated Knight pawn trial — October 24, 2026
 
 Matt supplied the GLB and explicitly requested pawns in the figurine set. Embedded metadata confirms CC BY 4.0 and Ulrik Langvandsbråten (best3deu). Eight character meshes, 72,561 triangles, no skin/skeleton or animation clips. Platform/flowers excluded. Shared meshes and 24 maps resized to 512px WebP total 3.24MB. Static pawn movement/captures only; other pieces remain the existing combat figurines. Original set retained as a separate choice. See assets/plated/CREDITS.md for attribution and modifications.
+
+## Greek Mythology embed evaluation — October 24, 2026
+
+Source: [Chess Set – Greek Mythology Pieces by ahingel](https://sketchfab.com/3d-models/chess-set-greek-mythology-pieces-10b53b9575294dfb915f8c0b5ea0a2fc), supplied by Matt as an embed.
+
+Verified with the official Viewer API in a local test page: viewerready succeeds; getNodeMap returns 102 nodes, including 32 separately named piece MatrixTransforms (16 White, 16 Black) and a board transform. A White pawn's local matrix was read, translated through setMatrix, and restored successfully. No download, extraction, purchase or account access was used. This confirms runtime object control without a page reload. It does not yet connect the embed to our chess rules.
+
+A playable option is technically feasible through an embed-specific adapter: map the 32 transforms to chess squares, route picking/legal moves through our rules, hide captures, handle promotions (reuse a matching piece node), restore undo, and set camera presets. The embedded set retains Sketchfab's own board, scene, loading and attribution; it cannot become a mesh style inside our Three.js park just by embedding. It also depends on a live third-party viewer; mobile loading/performance must be checked before shipping it as a game mode. Source is offered on the store; embedding access does not establish a license to extract or redistribute the models.
+
+Official reference: [Viewer API object controls](https://sketchfab.com/developers/viewer/functions), [initialization](https://sketchfab.com/developers/viewer/initialization). Evaluation complete; this set is not advertised as a playable selection yet.
