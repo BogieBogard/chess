@@ -1,5 +1,11 @@
 # Daily improvements
 
+## 2026-10-26
+- Added automatic on-device game recovery after completed moves, Undo, resignation, board flips and starting a new game. Reopening restores the game mode, side, difficulty, position, captures, move history, repetition keys and Undo snapshots. A pending computer turn resumes after the selected model set loads.
+- Recovery replays validated legal moves rather than trusting saved boards or display text. Invalid/incompatible saves and unavailable browser storage fall back safely. Saves stay in this browser; starting a new game replaces the saved game. No dock controls added.
+- Validation: 49 tests pass, including castling, en passant, underpromotion, repetition, resignation, illegal/corrupt saves and blocked storage. Local browser verified reload, retained move history, Undo across reload, pending computer turn and replacement by a fresh Pass & Play game; no console errors.
+- Model source checks (028/038) still need downloadable character files/sign-in; bench imports (027) remain explicitly deferred. Daily follow-up recorded as 043.
+
 ## 2026-10-24
 - Shipped 0c5faee and verified the live character-review page, real source playback and pause-time read-back, no console errors, and the visible Settings → Asset candidates → Preview animations link. Queue/model notes distinguish public-viewer evidence from the source-file/rig checks still pending.
 - Added an embedded character-review workbench linked from Settings → Asset candidates. Load one candidate, select its source animation, Play/Pause/Replay, and save Keep/Discard decisions locally. Previews start paused; discarded candidates do not return automatically, even through direct links. Game-set preferences remain separate.
