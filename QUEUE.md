@@ -53,7 +53,7 @@ Matt sends ideas here; preserve their order and context. Number new ideas consec
 | 041 | Put the board-set dropdown in the shared horizontal dock alongside Icons and Overhead; these should be its only components. Keep the layout clean and easy to understand. | Shipped 2026-10-24, 39f1c02; three-control dock verified at 320px and live. Floating selector and Battle view removed from dock; Flip moved into Pass & Play menu. Orbit gestures preserved. |
 | 042 | Remove useless pause-menu copy: Take a breath, Battle paused, and Return when ready / Your army will wait. | Shipped 2026-10-24, 39f1c02; live menu contains actions without the filler copy. |
 
-| 043 | Daily follow-up: preserve the current game across refresh/reopening without adding dock controls, while model source-file checks remain pending. | In progress 2026-10-26: local move-log recovery with legal replay, restored Undo and resumed computer turns. |
+| 043 | Daily follow-up: preserve the current game across refresh/reopening without adding dock controls, while model source-file checks remain pending. | Shipped 2026-10-26, 9abf0ae: local move-log recovery with legal replay, restored Undo and resumed computer turns. 49 tests pass; verified live Greek recovery and move history, plus 388px local layout/reload. |
 
 ## Working rules
 

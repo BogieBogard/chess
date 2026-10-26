@@ -1,6 +1,7 @@
 # Daily improvements
 
 ## 2026-10-26
+- Shipped 9abf0ae; Pages built successfully. Verified the live Greek game restores e4/Nf6 after reload with move history and Undo available, retained model preference and no console errors. Local recovery also verified at 388px CSS width without horizontal overflow.
 - Added automatic on-device game recovery after completed moves, Undo, resignation, board flips and starting a new game. Reopening restores the game mode, side, difficulty, position, captures, move history, repetition keys and Undo snapshots. A pending computer turn resumes after the selected model set loads.
 - Recovery replays validated legal moves rather than trusting saved boards or display text. Invalid/incompatible saves and unavailable browser storage fall back safely. Saves stay in this browser; starting a new game replaces the saved game. No dock controls added.
 - Validation: 49 tests pass, including castling, en passant, underpromotion, repetition, resignation, illegal/corrupt saves and blocked storage. Local browser verified reload, retained move history, Undo across reload, pending computer turn and replacement by a fresh Pass & Play game; no console errors.
