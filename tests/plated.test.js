@@ -26,3 +26,32 @@ test('Plated pawns and original figurine attackers safely handle imported target
  delete globalThis.matchMedia;
 });
 test('hybrid set keeps other types as articulated figurines',()=>{for(const type of'nbrqk')assert.ok(set.piece('w'+type).userData.body);assert.equal(set.piece('wp').userData.modelSet,'plated')});
+
+test('Plated king trial replaces only kings, fits its square and reuses the pawn resources',()=>{
+ for(const side of ['w','b']){
+  const king=set.kingPiece(side+'k'),pawn=set.piece(side+'p'),box=new T.Box3().setFromObject(king),size=box.getSize(new T.Vector3());
+  assert.equal(king.userData.code,side+'k');assert.equal(king.userData.modelSet,'plated');
+  assert.ok(size.x<.9&&size.z<.95&&size.y>1.7&&size.y<1.8);assert.ok(Math.abs(box.min.y)<1e-5);
+  assert.strictEqual(king.children[0].geometry,pawn.children[0].geometry);
+  assert.strictEqual(king.children[0].material,pawn.children[0].material);
+  for(const type of 'pnbrq')assert.ok(set.kingPiece(side+type).userData.body);
+ }
+ assert.equal(meta.meshes.reduce((n,m)=>n+m.indexCount/3,0)*2,145122);
+});
+test('Plated kings move, capture and castle with the original rooks without combat rig assumptions',async()=>{
+ globalThis.matchMedia=()=>({matches:false});
+ for(const side of ['w','b'])for(const style of ['duel','crown-breaker','sweep-finish','rift-unweave','crossfade'])for(const castle of [false,'king','queen']){
+  const home=side==='w'?60:4,move={f:home,t:castle===false?home-8:home+(castle==='king'?2:-2),...(castle?{castle:true}:{})};
+  const b=Object.create(Battlefield.prototype),scene=new T.Scene(),camera=new T.PerspectiveCamera(),king=set.kingPiece(side+'k');
+  king.position.set(home%8-3.5,0,(home>>3)-3.5);scene.add(king);
+  const otherIndex=castle?home+(castle==='king'?3:-4):move.t,other=set.kingPiece((castle?side:side==='w'?'b':'w')+(castle?'r':'p'));
+  other.position.set(otherIndex%8-3.5,0,(otherIndex>>3)-3.5);scene.add(other);
+  Object.assign(b,{scene,camera,units:new Map([[home,king],[otherIndex,other]]),effects:[],count:0});b.tween=async(ms,fn)=>{for(const t of [0,.25,.5,.75,1])fn(t)};
+  const scale=king.scale.clone(),before=camera.position.clone();let disposed=false;king.children[0].geometry.addEventListener('dispose',()=>disposed=true);
+  await b.animate({turn:side},move,'full',()=>{},style);
+  assert.ok(king.position.distanceTo(new T.Vector3(move.t%8-3.5,0,(move.t>>3)-3.5))<1e-8);
+  if(castle)assert.ok(other.position.distanceTo(new T.Vector3((home+move.t)/2%8-3.5,0,(home>>3)-3.5))<1e-8);
+  assert.deepEqual(king.scale,scale);assert.deepEqual(camera.position,before);assert.equal(b.units.size,0);assert.equal(b.effects.length,0);assert.equal(disposed,false);
+ }
+ delete globalThis.matchMedia;
+});

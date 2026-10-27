@@ -77,9 +77,9 @@ $('lightGraphics').onchange=()=>{battlefield?.setGraphics($('lightGraphics').che
 function updateModelControl(){$('pieceSetSwitch').disabled=busy||modelLoading;$('pieceSetSwitch').value=pendingModel?.id||modelSet}
 function applyPendingModel(){if(!pendingModel||busy)return;const next=pendingModel;pendingModel=null;if(next.id==='greek'){nativeBattlefield?.setActive(false);battlefield=next.view;greekBattlefield.setActive(true)}else{greekBattlefield?.setActive(false);battlefield=nativeBattlefield;battlefield?.setActive(true);battlefield?.setPieceSet(next.id,next.factory)}battlefield.paused=paused;battlefield?.setIconSide(mode==='ai'?human:null);battlefield?.setPieceIcons(pieceIcons);modelSet=next.id;$('pieceSetStatus').textContent='';if(next.persist)try{animationStorage?.setItem('iron-ivory-piece-set-v1',modelSet)}catch{}}
 async function choosePieceSet(style,persist=true){
- if(!['figurines','realistic','plated','greek'].includes(style)||modelLoading)return;
+ if(!['figurines','realistic','plated','plated-king','greek'].includes(style)||modelLoading)return;
  modelLoading=true;$('pieceSetStatus').textContent=style!=='figurines'?'Loading pieces…':'';updateModelControl();
- try{if(style==='greek'){if(!greekBattlefield){const {GreekView}=await import('./greek-view.js?v=20261024-greek-1');greekBattlefield=new GreekView(board,i=>tap(i));try{await greekBattlefield.ready}catch(error){greekBattlefield.dispose();greekBattlefield=null;throw error}}pendingModel={id:style,view:greekBattlefield,persist};render();return}const factory=style==='realistic'?(await import('./realistic-pieces.js')).loadRealisticPieces:style==='plated'?(await import('./plated-pawns.js')).loadPlatedPawns:null;const loaded=factory?await factory():null;pendingModel={id:style,factory:loaded?.piece,persist};$('pieceSetStatus').textContent=busy?'Switching after this move…':'';render()}
+ try{if(style==='greek'){if(!greekBattlefield){const {GreekView}=await import('./greek-view.js?v=20261024-greek-1');greekBattlefield=new GreekView(board,i=>tap(i));try{await greekBattlefield.ready}catch(error){greekBattlefield.dispose();greekBattlefield=null;throw error}}pendingModel={id:style,view:greekBattlefield,persist};render();return}const factory=style==='realistic'?(await import('./realistic-pieces.js')).loadRealisticPieces:['plated','plated-king'].includes(style)?(await import('./plated-pawns.js?v=20261027-king-1')).loadPlatedPawns:null;const loaded=factory?await factory():null;pendingModel={id:style,factory:style==='plated-king'?loaded?.kingPiece:loaded?.piece,persist};$('pieceSetStatus').textContent=busy?'Switching after this move…':'';render()}
  catch(error){$('pieceSetStatus').textContent='Couldn’t load pieces. Please try again.';console.warn('Piece set unavailable',error)}
  finally{modelLoading=false;updateModelControl()}
 }
@@ -125,6 +125,6 @@ $('fullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await doc
 document.addEventListener('fullscreenchange',()=>{$('fullscreenBtn').setAttribute('aria-label',document.fullscreenElement?'Exit fullscreen':'Enter fullscreen')});
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!$('appearancePreview').hidden){endAppearancePreview();return;}if(!$('settings').hidden){closeSettings();return}if(!$('pauseDialog').hidden){resume();return}if(document.body.classList.contains('playing')){pause();return}selected=-1;if(!busy)render()});start();
 let savedPieceSet;try{savedPieceSet=animationStorage?.getItem('iron-ivory-piece-set-v1')}catch{}
-const modelSetReady=choosePieceSet(['figurines','realistic','plated','greek'].includes(savedPieceSet)?savedPieceSet:'realistic',false).then(()=>{initializingGame=false;think()});
+const modelSetReady=choosePieceSet(['figurines','realistic','plated','plated-king','greek'].includes(savedPieceSet)?savedPieceSet:'realistic',false).then(()=>{initializingGame=false;think()});
 
 export { battlefield, modelSetReady };

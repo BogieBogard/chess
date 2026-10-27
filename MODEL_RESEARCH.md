@@ -1,6 +1,6 @@
 # Sketchfab model shortlist — October 22, 2026
 
-Requested by Matt, queue item 014. The original listing-based shortlist is preserved below. Current status: Realistic and the Plated pawn trial are installed; Greek Mythology is playable through its official embed. Dated sections record source-file checks and later public-viewer evaluation. Listing claims alone do not establish an exported rig.
+Requested by Matt, queue item 014. The original listing-based shortlist is preserved below. Current status: Realistic and the Plated pawn/king trials are installed; Greek Mythology is playable through its official embed. Dated sections record source-file checks and later public-viewer evaluation. Listing claims alone do not establish an exported rig.
 
 | Candidate | Creator | Listing information | Fit / next evaluation |
 |---|---|---|---|
@@ -68,3 +68,11 @@ Continued queue items 028 and 038 using the official Viewer API, without extract
 The new review section in candidates.html lets Matt load one character at a time, inspect source clips, play/pause/replay, and save browser-local Keep/Discard decisions. It starts previews paused, closes the previous viewer when switching, and never loads a discarded candidate from a saved/direct-link fallback. It does not change the selected game set or install models. Runtime metadata describes only what the public viewer exposes; scene-node counts do not establish skin/joint bindings.
 
 Reference: [Sketchfab Viewer API animation controls](https://sketchfab.com/developers/viewer/functions). Next adoption step still requires source GLB/original archives with license, actual skin/weights/clips, weapon separation, and measured game-side mobile cost. No rejected model has been restored.
+
+## Plated Knight king comparison — October 27, 2026
+
+Continuing queue 028 with Matt’s suggestion to try the supplied Plated Knight as king. The separate Plated king set imports only the two kings; all other pieces retain the original figurines. Plated pawns remains a separate saved comparison choice and Realistic remains the new-preference default. Switching preserves the current game.
+
+The king uses the existing extracted meshes, materials and 512px textures at 1.16× pawn scale: approximately 1.746 high, 0.879 wide and 0.945 deep on a unit square. Two characters contribute 145,122 triangles and reuse the pawn trial’s buffers/textures, with no extra asset download. Full mixed army geometry totals 586,898 triangles across 446 meshes; this is a geometry/draw budget, not a claim of physical-phone frame rates.
+
+Source license/creator and modifications remain in assets/plated/CREDITS.md. The supplied GLB still has no skeleton, weights or clips; importing it as king does not add articulated combat. Kings use simple motion/captures and move the original rook during castling. Tests cover both colors, both castling directions, capture styles, square fit, resource sharing and cleanup. No new source asset or rejected candidate adopted.

@@ -1,5 +1,10 @@
 # Daily improvements
 
+## 2026-10-27
+- Continued queue 028: added Plated king as a separate set-selector comparison. The imported knight replaces both kings at a larger scale, while other pieces retain the original figurines. Original sets and the Plated pawn trial remain available; selection and current game survive reload. Realistic stays the default for new preferences.
+- Reuses the existing attributed Plated model buffers, materials and textures, with no extra model download. The unrigged kings use simple movement/captures and support castling with the original rook. Credits and research record dimensions, geometry budget and limitations.
+- Validation: 51 tests pass. Browser checked model appearance, a legal king move, switching pawn/king trials without losing the game, saved selection after reload and the 388px CSS layout without horizontal overflow. No browser console errors observed.
+
 ## 2026-10-26
 - Shipped 9abf0ae; Pages built successfully. Verified the live Greek game restores e4/Nf6 after reload with move history and Undo available, retained model preference and no console errors. Local recovery also verified at 388px CSS width without horizontal overflow.
 - Added automatic on-device game recovery after completed moves, Undo, resignation, board flips and starting a new game. Reopening restores the game mode, side, difficulty, position, captures, move history, repetition keys and Undo snapshots. A pending computer turn resumes after the selected model set loads.
